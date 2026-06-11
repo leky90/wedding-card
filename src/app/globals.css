@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Bảng màu cưới đỏ - trắng */
+  --color-primary: #b01935;
+  --color-primary-deep: #8a0f29;
+  --color-primary-dark: #5f0a1d;
+  --color-rose-mid: #d4677d;
+  --color-rose-soft: #efb7c0;
+  --color-blush: #fdf1f3;
+  --color-cream: #fffaf7;
+  --color-ink: #46262e;
+  --color-muted: #7f5a64;
+
+  --shadow-card: 0 18px 45px -18px rgb(140 15 46 / 0.2);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-body: var(--font-be-vietnam);
+  --font-display: var(--font-playfair);
+  --font-script: var(--font-great-vibes);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  /* Hoạ tiết trang trí đặt absolute tràn mép — chặn cuộn ngang */
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #f5cdd5;
+  color: var(--color-primary-dark);
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rose-soft) transparent;
+}
+
+/* ---- Xuất hiện khi cuộn tới (class do <Reveal/> gắn) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Hiệu ứng vào trang (cover/hero) ---- */
+.rise {
+  opacity: 0;
+  animation: rise 0.9s ease-out forwards;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Cánh hoa rơi: chỉ animate transform/opacity cho nhẹ máy ---- */
+.petal {
+  position: absolute;
+  top: -8vh;
+  left: var(--left);
+  animation: petal-fall var(--dur, 15s) linear var(--delay, 0s) infinite;
+  will-change: transform;
+}
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--petal-o, 0.6);
+  }
+  85% {
+    opacity: var(--petal-o, 0.6);
+  }
+  100% {
+    transform: translate3d(var(--drift, 40px), 118vh, 0) rotate(320deg);
+    opacity: 0.1;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes heart-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.15);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.08);
+  }
+}
+@keyframes ring-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+.animate-float {
+  animation: float-soft 6s ease-in-out infinite;
+}
+.animate-heart {
+  animation: heart-beat 1.6s ease-in-out infinite;
+  transform-origin: center;
+}
+.animate-bounce-soft {
+  animation: bounce-soft 1.8s ease-in-out infinite;
+}
+
+/* Người dùng muốn giảm chuyển động → tắt toàn bộ hiệu ứng trang trí */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .petal {
+    display: none;
+  }
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-float,
+  .animate-heart,
+  .animate-bounce-soft {
+    animation: none;
+  }
 }
