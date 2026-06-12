@@ -11,10 +11,13 @@ export interface Person {
   /** Tên gọi hiển thị lớn trên thiệp */
   name: string;
   fullName: string;
+  /** Để trống ("") nếu chưa muốn hiển thị tên ba mẹ */
   parents: { father: string; mother: string };
   /** Lời giới thiệu ngắn */
   intro: string;
   image: string;
+  /** Vị trí crop ảnh trong khung (CSS object-position), ví dụ "50% 25%" */
+  imagePosition?: string;
 }
 
 export interface WeddingEvent {
@@ -39,6 +42,8 @@ export interface StoryMilestone {
   title: string;
   description: string;
   image: string;
+  /** Vị trí crop ảnh (CSS object-position) */
+  imagePosition?: string;
 }
 
 export interface GalleryPhoto {
@@ -72,6 +77,7 @@ export interface WeddingConfig {
     /** Ngày âm lịch — nhớ thay bằng ngày âm chính xác của bạn */
     lunarDate: string;
     heroImage: string;
+    heroImagePosition?: string;
   };
   invitation: {
     headline: string;
@@ -92,29 +98,33 @@ export interface WeddingConfig {
 export const weddingConfig: WeddingConfig = {
   couple: {
     groom: {
-      name: "Minh Quân",
-      fullName: "Đỗ Minh Quân",
-      parents: { father: "Đỗ Văn Bình", mother: "Lê Thị Mai" },
+      name: "Đình Kỳ",
+      fullName: "Đình Kỳ", // TODO: cập nhật họ tên đầy đủ
+      parents: { father: "", mother: "" }, // TODO: điền tên ba mẹ (để trống sẽ ẩn dòng này)
       intro:
-        "Một chàng kỹ sư yêu cà phê sáng và những chuyến đi xa. Từ ngày gặp Hà, mọi chuyến đi đều có thêm một người đồng hành.",
-      image: "/images/groom.svg",
+        "Một người trầm tính, thích những điều giản dị. Từ ngày có Quỳnh, niềm vui mỗi ngày của Kỳ là được nhìn thấy nụ cười của cô ấy.",
+      image: "/images/groom.jpg",
+      imagePosition: "50% 22%",
     },
     bride: {
-      name: "Thu Hà",
-      fullName: "Trần Thu Hà",
-      parents: { father: "Trần Quốc Hùng", mother: "Phạm Thu Hương" },
+      name: "Như Quỳnh",
+      fullName: "Như Quỳnh", // TODO: cập nhật họ tên đầy đủ
+      parents: { father: "", mother: "" }, // TODO: điền tên ba mẹ (để trống sẽ ẩn dòng này)
       intro:
-        "Cô gái nhỏ thích hoa, thích nấu ăn và tin rằng hạnh phúc nằm ở những điều giản dị nhất — như một bữa cơm có đủ hai người.",
-      image: "/images/bride.svg",
+        "Cô gái nhỏ yêu hoa và những điều dịu dàng. Quỳnh tin rằng hạnh phúc là một bữa cơm ấm, có đủ hai người.",
+      image: "/images/bride.jpg",
+      imagePosition: "50% 20%",
     },
   },
 
   wedding: {
+    // TODO: thay bằng ngày cưới thật (giờ tiệc chính để đếm ngược)
     dateIso: "2026-12-20T18:00:00+07:00",
     displayDate: "20 . 12 . 2026",
     dayLabel: "Chủ Nhật",
     lunarDate: "(Tức ngày 12 tháng 11 năm Bính Ngọ)",
-    heroImage: "/images/hero-couple.svg",
+    heroImage: "/images/hero-couple.jpg",
+    heroImagePosition: "50% 18%",
   },
 
   invitation: {
@@ -157,7 +167,7 @@ export const weddingConfig: WeddingConfig = {
       dateLabel: "Chủ Nhật, 20.12.2026",
       startIso: "2026-12-20T18:00:00+07:00",
       endIso: "2026-12-20T21:00:00+07:00",
-      venue: "Trung Tâm Tiệc Cưới Diamond Palace — Sảnh Ruby",
+      venue: "Trung Tâm Tiệc Cưới Diamond Palace, Sảnh Ruby",
       address: "789 Điện Biên Phủ, Quận 3, TP. Hồ Chí Minh",
       mapUrl: "https://maps.google.com/?q=Diamond+Palace+Dien+Bien+Phu",
       icon: "party",
@@ -169,55 +179,61 @@ export const weddingConfig: WeddingConfig = {
       year: "2019",
       title: "Lần đầu gặp gỡ",
       description:
-        "Một buổi chiều mưa Sài Gòn, chúng mình tình cờ ngồi chung một quán cà phê nhỏ. Ai ngờ cái gật đầu chào hôm ấy lại là mở đầu của cả một đời.",
-      image: "/images/story-1.svg",
+        "Một buổi chiều cuối năm, Kỳ gặp Quỳnh qua lời giới thiệu của một người bạn chung. Cái gật đầu chào hôm ấy, ai ngờ lại là mở đầu của cả một đời.",
+      image: "/images/story-1.jpg",
+      imagePosition: "50% 30%",
     },
     {
       year: "2021",
       title: "Lời tỏ tình",
       description:
-        "Dưới ánh đèn vàng của con phố quen, Quân lấy hết can đảm nói ba từ quan trọng nhất. Và Hà đã cười — nụ cười thay cho câu trả lời.",
-      image: "/images/story-2.svg",
+        "Sau hai năm làm bạn, Kỳ lấy hết can đảm nói ra ba từ quan trọng nhất. Quỳnh chỉ cười, và nụ cười ấy chính là câu trả lời.",
+      image: "/images/story-2.jpg",
+      imagePosition: "52% 35%",
     },
     {
       year: "2025",
       title: "Lời cầu hôn",
       description:
-        "Trên đồi hoa Đà Lạt lộng gió, một chiếc nhẫn nhỏ và một câu hỏi lớn: \"Làm vợ anh nhé?\" — Hà gật đầu trước khi nước mắt kịp rơi.",
-      image: "/images/story-3.svg",
+        "Một chiếc nhẫn nhỏ và một câu hỏi lớn: \"Làm vợ anh nhé?\". Quỳnh gật đầu trước khi nước mắt kịp rơi.",
+      image: "/images/story-3.jpg",
+      imagePosition: "50% 40%",
     },
     {
       year: "2026",
       title: "Về chung một nhà",
       description:
         "Và hôm nay, chúng mình chính thức gọi nhau là gia đình. Cảm ơn bạn đã là một phần trong hành trình hạnh phúc này.",
-      image: "/images/story-4.svg",
+      image: "/images/story-4.jpg",
+      imagePosition: "50% 55%",
     },
   ],
 
   gallery: [
-    { src: "/images/gallery-1.svg", alt: "Ảnh cưới 1", width: 800, height: 1000 },
-    { src: "/images/gallery-2.svg", alt: "Ảnh cưới 2", width: 800, height: 800 },
-    { src: "/images/gallery-3.svg", alt: "Ảnh cưới 3", width: 800, height: 1100 },
-    { src: "/images/gallery-4.svg", alt: "Ảnh cưới 4", width: 800, height: 650 },
-    { src: "/images/gallery-5.svg", alt: "Ảnh cưới 5", width: 800, height: 950 },
-    { src: "/images/gallery-6.svg", alt: "Ảnh cưới 6", width: 800, height: 800 },
+    { src: "/images/gallery-1.jpg", alt: "Ảnh cưới trong cung điện cổ", width: 1064, height: 1600 },
+    { src: "/images/gallery-2.jpg", alt: "Cô dâu trên bậc thang di sản", width: 1019, height: 1600 },
+    { src: "/images/gallery-3.jpg", alt: "Nắm tay nhau bước về phía trước", width: 1013, height: 1600 },
+    { src: "/images/gallery-4.jpg", alt: "Nụ hôn lên trán cô dâu", width: 1064, height: 1600 },
+    { src: "/images/gallery-5.jpg", alt: "Vòng tay ôm từ phía sau", width: 1064, height: 1600 },
+    { src: "/images/gallery-6.jpg", alt: "Hai đứa mình trong studio", width: 1015, height: 1600 },
+    { src: "/images/gallery-7.jpg", alt: "Giữa vườn hoa pastel", width: 1065, height: 1600 },
+    { src: "/images/gallery-8.jpg", alt: "Chiều vàng bên thành cổ", width: 1013, height: 1600 },
   ],
 
   banks: [
     {
       label: "Mừng cưới Chú Rể",
-      bank: "Vietcombank — CN Bình Thạnh",
-      accountNumber: "0123456789",
-      accountName: "DO MINH QUAN",
-      qrImage: "/images/qr-groom.svg",
+      bank: "Vietcombank", // TODO: cập nhật ngân hàng + chi nhánh
+      accountNumber: "0123456789", // TODO: số tài khoản thật
+      accountName: "DINH KY",
+      qrImage: "/images/qr-groom.svg", // TODO: thay QR thật
     },
     {
       label: "Mừng cưới Cô Dâu",
-      bank: "Techcombank — CN Đà Lạt",
-      accountNumber: "9876543210",
-      accountName: "TRAN THU HA",
-      qrImage: "/images/qr-bride.svg",
+      bank: "Techcombank", // TODO: cập nhật ngân hàng + chi nhánh
+      accountNumber: "9876543210", // TODO: số tài khoản thật
+      accountName: "NHU QUYNH",
+      qrImage: "/images/qr-bride.svg", // TODO: thay QR thật
     },
   ],
 
@@ -229,12 +245,12 @@ export const weddingConfig: WeddingConfig = {
       message: "Chúc hai con trăm năm hạnh phúc, sớm sinh quý tử, mãi yêu thương nhau như ngày đầu!",
     },
     {
-      name: "Hội bạn thân Đại học",
-      message: "Cuối cùng cũng đến ngày này rồi! Chúc hai bạn về chung nhà luôn đầy ắp tiếng cười.",
+      name: "Hội bạn thân",
+      message: "Cuối cùng cũng đến ngày này rồi! Chúc Kỳ và Quỳnh về chung nhà luôn đầy ắp tiếng cười.",
     },
     {
-      name: "Đồng nghiệp của Hà",
-      message: "Chúc chị Hà và anh Quân hạnh phúc viên mãn, bên nhau đầu bạc răng long nhé!",
+      name: "Đồng nghiệp của Quỳnh",
+      message: "Chúc Quỳnh và anh Kỳ hạnh phúc viên mãn, bên nhau đầu bạc răng long nhé!",
     },
   ],
 
