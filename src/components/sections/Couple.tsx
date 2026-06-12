@@ -25,16 +25,19 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
             alt={person.fullName}
             loading="lazy"
             className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: person.imagePosition }}
           />
         </div>
       </div>
       <p className="mt-8 font-script text-4xl text-primary-deep md:text-5xl">{person.name}</p>
       <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-rose-mid">{role}</p>
-      <p className="mt-4 text-sm leading-relaxed text-muted">
-        {parentLabel}
-        <br />
-        Ông {person.parents.father} &amp; Bà {person.parents.mother}
-      </p>
+      {(person.parents.father || person.parents.mother) && (
+        <p className="mt-4 text-sm leading-relaxed text-muted">
+          {parentLabel}
+          <br />
+          Ông {person.parents.father} &amp; Bà {person.parents.mother}
+        </p>
+      )}
       <p className="mt-4 max-w-xs text-sm italic leading-relaxed text-ink/80">“{person.intro}”</p>
     </div>
   );

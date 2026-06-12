@@ -44,7 +44,7 @@ export function Countdown() {
         </div>
         {timeLeft.isOver && (
           <p className="mt-8 text-center font-script text-3xl text-primary">
-            Chúng mình đã chính thức về chung một nhà 💍
+            Chúng mình đã chính thức về chung một nhà
           </p>
         )}
       </Reveal>

@@ -1,4 +1,4 @@
-import { ChevronDown, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 
 import { BloomCluster, CornerFloral } from "@/components/ui/Ornaments";
 import { asset } from "@/lib/assets";
@@ -46,6 +46,7 @@ export function Hero() {
               alt={`${groom.name} và ${bride.name}`}
               fetchPriority="high"
               className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition: wedding.heroImagePosition }}
             />
           </div>
         </div>
@@ -69,10 +70,6 @@ export function Hero() {
             {wedding.dayLabel}, {wedding.lunarDate}
           </p>
         </div>
-      </div>
-
-      <div aria-hidden className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary/70">
-        <ChevronDown className="animate-bounce-soft h-6 w-6" />
       </div>
     </section>
   );

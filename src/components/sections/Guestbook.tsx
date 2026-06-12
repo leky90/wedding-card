@@ -119,14 +119,14 @@ export function Guestbook() {
 
         <Reveal delay={120}>
           <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-rose-mid md:text-left">
-            {wishes.length} lời chúc 💕
+            {wishes.length} lời chúc
           </p>
           <ul className="thin-scrollbar max-h-[430px] space-y-3 overflow-y-auto pr-1">
             {wishes.map((wish, i) => (
               <li key={`${wish.name}-${i}`} className="rounded-2xl border border-rose-soft/50 bg-white p-4 shadow-sm">
                 <Quote className="h-4 w-4 text-rose-mid" aria-hidden />
                 <p className="mt-2 text-sm leading-relaxed text-ink/85">{wish.message}</p>
-                <p className="mt-2 text-xs font-bold text-primary">— {wish.name}</p>
+                <p className="mt-2 text-xs font-bold text-primary">{wish.name}</p>
               </li>
             ))}
           </ul>

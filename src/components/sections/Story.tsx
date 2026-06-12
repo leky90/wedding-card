@@ -34,12 +34,13 @@ export function Story() {
                       onLeft ? "md:ml-0" : "md:ml-[calc(50%+2.5rem)]",
                     )}
                   >
-                    <div className="relative h-44 w-full md:h-48">
+                    <div className="relative h-52 w-full md:h-60">
                       <img
                         src={asset(milestone.image)}
                         alt={milestone.title}
                         loading="lazy"
                         className="absolute inset-0 h-full w-full object-cover"
+                        style={{ objectPosition: milestone.imagePosition }}
                       />
                     </div>
                     <div className="p-5 md:p-6">

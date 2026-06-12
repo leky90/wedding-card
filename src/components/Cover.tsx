@@ -79,7 +79,7 @@ export function Cover() {
             <span aria-hidden className="absolute inset-0 rounded-full border border-primary/40" style={{ animation: "ring-pulse 2.4s ease-out 1.2s infinite" }} />
             <span className="font-script text-2xl md:text-3xl">Mở thiệp</span>
           </button>
-          <p className="mt-5 text-xs text-muted">Chạm để mở thiệp mời 💌</p>
+          <p className="mt-5 text-xs text-muted">Chạm để mở thiệp mời</p>
         </div>
       </div>
     </div>

@@ -87,8 +87,8 @@ export function Rsvp() {
               <p className="mt-5 font-script text-4xl text-primary-deep">Cảm ơn {name.trim()}!</p>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 {attend === "yes"
-                  ? "Chúng mình rất mong được gặp bạn trong ngày vui. Hẹn gặp bạn nhé! 🌹"
-                  : "Tiếc quá! Cảm ơn bạn đã phản hồi — hẹn gặp bạn một dịp gần nhất nhé! 🌹"}
+                  ? "Chúng mình rất mong được gặp bạn trong ngày vui. Hẹn gặp bạn nhé!"
+                  : "Tiếc quá! Cảm ơn bạn đã phản hồi, hẹn gặp bạn một dịp gần nhất nhé!"}
               </p>
               <button
                 type="button"
