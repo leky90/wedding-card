@@ -1,8 +1,8 @@
 import { Heart } from "lucide-react";
-import Image from "next/image";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -35,12 +35,11 @@ export function Story() {
                     )}
                   >
                     <div className="relative h-44 w-full md:h-48">
-                      <Image
-                        src={milestone.image}
+                      <img
+                        src={asset(milestone.image)}
                         alt={milestone.title}
-                        fill
-                        sizes="(min-width: 768px) 22rem, 100vw"
-                        className="object-cover"
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover"
                       />
                     </div>
                     <div className="p-5 md:p-6">

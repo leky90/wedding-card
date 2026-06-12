@@ -1,10 +1,10 @@
 import { Heart } from "lucide-react";
-import Image from "next/image";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { weddingConfig, type Person } from "@/lib/wedding-config";
+import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
+import { weddingConfig, type Person } from "@/lib/wedding-config";
 
 interface PersonCardProps {
   person: Person;
@@ -20,12 +20,11 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
       <div className="relative">
         <div className={cn("absolute -inset-3 rounded-b-3xl rounded-t-full border border-primary/25", frameTilt)} />
         <div className="relative aspect-[3/4] w-52 overflow-hidden rounded-b-2xl rounded-t-full shadow-card md:w-60">
-          <Image
-            src={person.image}
+          <img
+            src={asset(person.image)}
             alt={person.fullName}
-            fill
-            sizes="(min-width: 768px) 15rem, 13rem"
-            className="object-cover"
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         </div>
       </div>

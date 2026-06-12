@@ -1,9 +1,8 @@
-"use client";
-
 import { ArrowUp, Disc3, Music } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { INVITATION_OPEN_EVENT } from "@/components/Cover";
+import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -15,7 +14,7 @@ export function FloatingButtons() {
 
   const tryPlay = useCallback(async () => {
     if (!audioRef.current) {
-      const audio = new Audio(weddingConfig.audioSrc);
+      const audio = new Audio(asset(weddingConfig.audioSrc));
       audio.loop = true;
       audio.volume = 0.55;
       audioRef.current = audio;

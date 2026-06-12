@@ -1,10 +1,10 @@
-"use client";
-
 import { Heart, Send } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getRemoteConfig, insertRsvp, type RsvpPayload } from "@/lib/api";
+import { saveLocalRsvp } from "@/lib/local-store";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -12,31 +12,12 @@ const inputClass =
   "w-full rounded-xl border border-rose-soft/70 bg-white px-4 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/50 focus:border-primary focus:ring-2 focus:ring-primary/15";
 const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink/70";
 
-interface RsvpEntry {
-  name: string;
-  side: string;
-  attend: "yes" | "no";
-  guests: number;
-  message: string;
-  sentAt: string;
-}
-
-/**
- * RSVP hiện lưu localStorage (chưa có backend).
- * Khi nối Google Form / API thì chỉ cần thay thân hàm này.
- */
-function saveRsvp(entry: RsvpEntry) {
-  try {
-    const key = "wedding-rsvp";
-    const prev: RsvpEntry[] = JSON.parse(window.localStorage.getItem(key) ?? "[]");
-    window.localStorage.setItem(key, JSON.stringify([...prev, entry]));
-  } catch {
-    // storage bị chặn/đầy — không chặn trải nghiệm khách
-  }
-}
+// Có env Supabase thì gửi API, không thì lưu localStorage (chế độ demo)
+const REMOTE = getRemoteConfig();
 
 export function Rsvp() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [name, setName] = useState("");
   const [side, setSide] = useState("Chú rể");
   const [attend, setAttend] = useState<"yes" | "no" | null>(null);
@@ -44,7 +25,7 @@ export function Rsvp() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       setError("Bạn ơi, cho chúng mình xin tên nhé!");
@@ -55,7 +36,26 @@ export function Rsvp() {
       return;
     }
     setError(null);
-    saveRsvp({ name: name.trim(), side, attend, guests, message: message.trim(), sentAt: new Date().toISOString() });
+
+    const payload: RsvpPayload = {
+      name: name.trim(),
+      side,
+      attend,
+      guests,
+      message: message.trim(),
+    };
+
+    if (REMOTE) {
+      setSending(true);
+      const ok = await insertRsvp(REMOTE, payload);
+      setSending(false);
+      if (!ok) {
+        setError("Gửi chưa được do kết nối. Bạn thử lại giúp mình nhé!");
+        return;
+      }
+    } else {
+      saveLocalRsvp({ ...payload, sentAt: new Date().toISOString() });
+    }
     setSent(true);
   };
 
@@ -192,9 +192,10 @@ export function Rsvp() {
 
               <button
                 type="submit"
-                className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-bold tracking-wide text-white shadow-card transition hover:bg-primary-deep"
+                disabled={sending}
+                className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-bold tracking-wide text-white shadow-card transition hover:bg-primary-deep disabled:cursor-default disabled:opacity-60"
               >
-                <Send className="h-4 w-4" aria-hidden /> Gửi xác nhận
+                <Send className="h-4 w-4" aria-hidden /> {sending ? "Đang gửi..." : "Gửi xác nhận"}
               </button>
             </form>
           )}

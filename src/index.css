@@ -13,12 +13,11 @@
   --color-muted: #7f5a64;
 
   --shadow-card: 0 18px 45px -18px rgb(140 15 46 / 0.2);
-}
 
-@theme inline {
-  --font-body: var(--font-be-vietnam);
-  --font-display: var(--font-playfair);
-  --font-script: var(--font-great-vibes);
+  /* Font tự host qua Fontsource (import trong main.tsx) */
+  --font-body: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-script: "Great Vibes", "Brush Script MT", cursive;
 }
 
 html {
@@ -29,6 +28,7 @@ body {
   background: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
   /* Hoạ tiết trang trí đặt absolute tràn mép — chặn cuộn ngang */
   overflow-x: hidden;
 }

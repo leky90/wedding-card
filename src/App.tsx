@@ -12,7 +12,7 @@ import { Rsvp } from "@/components/sections/Rsvp";
 import { Story } from "@/components/sections/Story";
 import { Petals } from "@/components/ui/Petals";
 
-export default function Home() {
+export default function App() {
   return (
     <>
       <Cover />

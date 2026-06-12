@@ -1,37 +1,61 @@
-"use client";
-
 import { NotebookPen, Quote } from "lucide-react";
-import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { fetchWishes, getRemoteConfig, insertWish } from "@/lib/api";
+import { addLocalWish, loadLocalWishes } from "@/lib/local-store";
 import { cn } from "@/lib/utils";
-import {
-  addWish,
-  getServerWishesSnapshot,
-  getWishesSnapshot,
-  subscribeWishes,
-} from "@/lib/wish-store";
+import { weddingConfig, type Wish } from "@/lib/wedding-config";
 
 const inputClass =
   "w-full rounded-xl border border-rose-soft/70 bg-white px-4 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/50 focus:border-primary focus:ring-2 focus:ring-primary/15";
 
+// Có env Supabase thì đọc/ghi API, không thì localStorage (chế độ demo)
+const REMOTE = getRemoteConfig();
+
 export function Guestbook() {
-  // localStorage là "external store" → SSR render lời chúc mẫu,
-  // client tự cập nhật thêm lời chúc đã lưu mà không lệch hydration
-  const wishes = useSyncExternalStore(subscribeWishes, getWishesSnapshot, getServerWishesSnapshot);
+  // Chế độ remote: hiển thị lời chúc mẫu trong lúc tải (và khi bảng còn trống)
+  const [wishes, setWishes] = useState<Wish[]>(() =>
+    REMOTE ? weddingConfig.wishes : loadLocalWishes(),
+  );
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
-  const submit = (e: FormEvent) => {
+  useEffect(() => {
+    if (!REMOTE) return;
+    let alive = true;
+    fetchWishes(REMOTE).then((remoteWishes) => {
+      if (alive && remoteWishes.length) setWishes(remoteWishes);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) {
       setError("Bạn điền giúp mình cả tên và lời chúc nhé!");
       return;
     }
     setError(null);
-    addWish({ name: name.trim(), message: message.trim() });
+
+    const wish: Wish = { name: name.trim(), message: message.trim() };
+    if (REMOTE) {
+      setSending(true);
+      const ok = await insertWish(REMOTE, wish);
+      setSending(false);
+      if (!ok) {
+        setError("Gửi chưa được do kết nối — bạn thử lại nhé!");
+        return;
+      }
+    } else {
+      addLocalWish(wish);
+    }
+    setWishes((prev) => [wish, ...prev]);
     setName("");
     setMessage("");
   };
@@ -85,9 +109,10 @@ export function Guestbook() {
             )}
             <button
               type="submit"
-              className="mt-5 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-bold tracking-wide text-white shadow-card transition hover:bg-primary-deep"
+              disabled={sending}
+              className="mt-5 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-bold tracking-wide text-white shadow-card transition hover:bg-primary-deep disabled:cursor-default disabled:opacity-60"
             >
-              <NotebookPen className="h-4 w-4" aria-hidden /> Gửi lời chúc
+              <NotebookPen className="h-4 w-4" aria-hidden /> {sending ? "Đang gửi..." : "Gửi lời chúc"}
             </button>
           </form>
         </Reveal>

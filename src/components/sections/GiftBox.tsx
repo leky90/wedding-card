@@ -1,38 +1,39 @@
-"use client";
-
 import { Check, Copy } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 
 import { CornerFloral } from "@/components/ui/Ornaments";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { asset } from "@/lib/assets";
 import { weddingConfig } from "@/lib/wedding-config";
+
+async function writeToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    // Fallback cho WebView (Zalo/Messenger...) chưa có Clipboard API
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      return copied;
+    } catch {
+      return false;
+    }
+  }
+}
 
 export function GiftBox() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
 
   const copy = async (accountNumber: string) => {
-    let copied = false;
-    try {
-      await navigator.clipboard.writeText(accountNumber);
-      copied = true;
-    } catch {
-      // Fallback cho WebView (Zalo/Messenger...) chưa có Clipboard API
-      try {
-        const textarea = document.createElement("textarea");
-        textarea.value = accountNumber;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
-        textarea.select();
-        copied = document.execCommand("copy");
-        textarea.remove();
-      } catch {
-        copied = false;
-      }
-    }
-    if (copied) {
+    if (await writeToClipboard(accountNumber)) {
       setCopiedAccount(accountNumber);
       window.setTimeout(() => setCopiedAccount(null), 2200);
     }
@@ -65,11 +66,12 @@ export function GiftBox() {
               <div className="rounded-3xl border border-white/15 bg-white/[0.07] p-6 text-center backdrop-blur-sm md:p-8">
                 <p className="font-script text-3xl text-rose-soft">{account.label}</p>
                 <div className="mx-auto mt-5 w-40 rounded-2xl bg-white p-2 shadow-lg">
-                  <Image
-                    src={account.qrImage}
+                  <img
+                    src={asset(account.qrImage)}
                     alt={`Mã QR ${account.label}`}
                     width={600}
                     height={660}
+                    loading="lazy"
                     className="h-auto w-full rounded-xl"
                   />
                 </div>

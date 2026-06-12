@@ -1,11 +1,9 @@
-"use client";
-
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { asset } from "@/lib/assets";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export function Gallery() {
@@ -56,12 +54,12 @@ export function Gallery() {
             aria-label={`Xem ${photo.alt}`}
             className="group relative mb-3 block w-full cursor-pointer overflow-hidden rounded-xl border border-rose-soft/40 focus-visible:outline-2 focus-visible:outline-primary md:mb-4"
           >
-            <Image
-              src={photo.src}
+            <img
+              src={asset(photo.src)}
               alt={photo.alt}
               width={photo.width}
               height={photo.height}
-              sizes="(min-width: 768px) 20rem, 45vw"
+              loading="lazy"
               className="h-auto w-full transition duration-500 group-hover:scale-[1.04]"
             />
             <span className="absolute inset-0 flex items-center justify-center bg-primary-dark/0 opacity-0 transition duration-300 group-hover:bg-primary-dark/25 group-hover:opacity-100">
@@ -82,12 +80,10 @@ export function Gallery() {
           <figure className="flex max-h-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
             {/* container cố định + object-contain: hiển thị đúng với mọi tỉ lệ ảnh */}
             <div className="relative h-[72vh] w-[88vw] max-w-3xl">
-              <Image
-                src={photos[index].src}
+              <img
+                src={asset(photos[index].src)}
                 alt={photos[index].alt}
-                fill
-                sizes="88vw"
-                className="object-contain"
+                className="h-full w-full object-contain"
               />
             </div>
             <figcaption className="mt-3 text-center text-xs tracking-widest text-white/70">

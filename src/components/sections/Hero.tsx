@@ -1,7 +1,7 @@
 import { ChevronDown, Heart } from "lucide-react";
-import Image from "next/image";
 
 import { BloomCluster, CornerFloral } from "@/components/ui/Ornaments";
+import { asset } from "@/lib/assets";
 import { weddingConfig } from "@/lib/wedding-config";
 
 /** Lấy chữ cái đầu của từ cuối trong tên ("Minh Quân" → "Q") */
@@ -41,13 +41,11 @@ export function Hero() {
           <BloomCluster className="absolute -top-7 left-1/2 z-10 h-10 w-32 -translate-x-1/2 text-primary md:-top-8 md:h-12 md:w-40" />
           <div className="absolute -inset-3 rounded-b-[2rem] rounded-t-full border border-primary/30 md:-inset-4" />
           <div className="relative aspect-[3/4] w-52 overflow-hidden rounded-b-[1.6rem] rounded-t-full shadow-card md:w-64">
-            <Image
-              src={wedding.heroImage}
+            <img
+              src={asset(wedding.heroImage)}
               alt={`${groom.name} và ${bride.name}`}
-              fill
-              priority
-              sizes="(min-width: 768px) 16rem, 13rem"
-              className="object-cover"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
         </div>
