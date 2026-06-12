@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💌 Thiệp Cưới Online
 
-## Getting Started
+Trang thiệp cưới online một trang, tông **đỏ - trắng** sang trọng, responsive trên mọi
+thiết bị, hiệu ứng nhẹ (cánh hoa rơi, fade khi cuộn, đếm ngược...). Xây dựng bằng
+Next.js 16 + Tailwind CSS v4.
 
-First, run the development server:
+## Chạy thử
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # mở http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Lệnh khác: `pnpm build` (build production) · `pnpm test` (unit test) · `pnpm lint`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✏️ Thay nội dung của bạn (3 bước)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Mọi chữ trên thiệp đều là **mockup** và nằm gọn trong **một file duy nhất**:
 
-## Learn More
+### 1. Sửa thông tin — [`src/lib/wedding-config.ts`](src/lib/wedding-config.ts)
 
-To learn more about Next.js, take a look at the following resources:
+Tên cô dâu chú rể, song thân, ngày cưới (dương + âm lịch), 3 sự kiện (giờ, địa điểm,
+link Google Maps), chuyện tình yêu, số tài khoản mừng cưới, lời chúc mẫu... Sửa trực
+tiếp các giá trị, lưu lại là thiệp tự cập nhật.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Lưu ý: `dateIso` / `startIso` / `endIso` dùng định dạng ISO kèm múi giờ VN,
+> ví dụ `"2026-12-20T18:00:00+07:00"` — dùng cho đếm ngược và nút "Thêm vào lịch".
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Thay ảnh — thư mục [`public/images/`](public/images)
 
-## Deploy on Vercel
+Ảnh hiện tại là SVG placeholder có ghi sẵn kích thước gợi ý. Thả ảnh thật (jpg/png)
+vào thư mục rồi đổi đường dẫn tương ứng trong `wedding-config.ts`
+(ví dụ `image: "/images/groom.jpg"`). Gồm: ảnh hero, chân dung 2 người, 4 ảnh
+chuyện tình, 6 ảnh album, 2 mã QR ngân hàng.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. Nhạc nền — `public/music/wedding-song.mp3`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Thêm file nhạc (bản có bản quyền sử dụng) vào đúng tên trên. Nhạc tự phát khi khách
+bấm "Mở thiệp"; chưa có file thì nút nhạc im lặng, không lỗi.
+
+## Cấu trúc
+
+```
+src/
+├── app/                  # layout (font, SEO), page ghép các section, theme globals.css
+├── components/
+│   ├── Cover.tsx         # màn bìa "Mở thiệp"
+│   ├── FloatingButtons.tsx  # nút nhạc + lên đầu trang
+│   ├── sections/         # Hero, Countdown, Couple, Story, Gallery, Events,
+│   │                     # GiftBox, Rsvp, Guestbook, Footer
+│   └── ui/               # Reveal (hiện khi cuộn), Petals (hoa rơi), hoạ tiết SVG
+└── lib/                  # wedding-config.ts (NỘI DUNG Ở ĐÂY), countdown, wish-store
+```
+
+Đổi màu chủ đạo: sửa các token `--color-*` đầu file [`src/app/globals.css`](src/app/globals.css).
+
+## Ghi chú
+
+- **RSVP & Sổ lưu bút** hiện lưu `localStorage` trên máy khách (chưa có backend).
+  Muốn nhận phản hồi tập trung: nối Google Form/Sheets hoặc API — điểm thay duy nhất
+  là `saveRsvp()` trong `Rsvp.tsx` và `src/lib/wish-store.ts`.
+- Hiệu ứng tôn trọng `prefers-reduced-motion`; không có JS vẫn đọc được toàn bộ thiệp.
+- Deploy nhanh: đẩy repo lên GitHub rồi import vào [Vercel](https://vercel.com) — trang
+  build tĩnh hoàn toàn nên tải rất nhanh.
