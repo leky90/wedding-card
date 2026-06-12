@@ -13,12 +13,28 @@ export function GiftBox() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
 
   const copy = async (accountNumber: string) => {
+    let copied = false;
     try {
       await navigator.clipboard.writeText(accountNumber);
+      copied = true;
+    } catch {
+      // Fallback cho WebView (Zalo/Messenger...) chưa có Clipboard API
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = accountNumber;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        copied = document.execCommand("copy");
+        textarea.remove();
+      } catch {
+        copied = false;
+      }
+    }
+    if (copied) {
       setCopiedAccount(accountNumber);
       window.setTimeout(() => setCopiedAccount(null), 2200);
-    } catch {
-      // Trình duyệt cũ không có Clipboard API — bỏ qua, khách vẫn thấy số
     }
   };
 

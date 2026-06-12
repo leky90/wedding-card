@@ -79,15 +79,17 @@ export function Gallery() {
           className="fixed inset-0 z-[70] flex items-center justify-center bg-[#30060f]/95 p-4 backdrop-blur-sm"
           onClick={close}
         >
-          <figure className="relative max-h-full" onClick={(e) => e.stopPropagation()}>
-            <Image
-              src={photos[index].src}
-              alt={photos[index].alt}
-              width={photos[index].width}
-              height={photos[index].height}
-              sizes="100vw"
-              className="max-h-[78vh] w-auto rounded-lg shadow-2xl"
-            />
+          <figure className="flex max-h-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            {/* container cố định + object-contain: hiển thị đúng với mọi tỉ lệ ảnh */}
+            <div className="relative h-[72vh] w-[88vw] max-w-3xl">
+              <Image
+                src={photos[index].src}
+                alt={photos[index].alt}
+                fill
+                sizes="88vw"
+                className="object-contain"
+              />
+            </div>
             <figcaption className="mt-3 text-center text-xs tracking-widest text-white/70">
               {index + 1} / {photos.length}
             </figcaption>
@@ -97,7 +99,7 @@ export function Gallery() {
             type="button"
             onClick={close}
             aria-label="Đóng"
-            className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25"
+            className="absolute right-4 top-4 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-soft"
           >
             <X className="h-5 w-5" aria-hidden />
           </button>
@@ -108,7 +110,7 @@ export function Gallery() {
               step(-1);
             }}
             aria-label="Ảnh trước"
-            className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25 md:left-6"
+            className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-soft md:left-6"
           >
             <ChevronLeft className="h-6 w-6" aria-hidden />
           </button>
@@ -119,7 +121,7 @@ export function Gallery() {
               step(1);
             }}
             aria-label="Ảnh sau"
-            className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25 md:right-6"
+            className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-white/10 p-2.5 text-white transition hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-soft md:right-6"
           >
             <ChevronRight className="h-6 w-6" aria-hidden />
           </button>
