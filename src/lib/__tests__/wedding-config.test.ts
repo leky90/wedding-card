@@ -9,14 +9,19 @@ import { weddingConfig } from "@/lib/wedding-config";
 
 /** Gom mọi chuỗi khách sẽ NHÌN THẤY trên thiệp */
 function visibleStrings(): string[] {
-  const { couple, wedding, invitation, events, story, gallery, banks, wishes } = weddingConfig;
+  const { couple, wedding, invitation, events, story, gallery, banks, wishes, dayTimeline } =
+    weddingConfig;
+  const personStrings = [couple.groom, couple.bride].flatMap((p) => [
+    p.name,
+    p.fullName,
+    p.intro,
+    p.lineage ?? "",
+    p.hometown ?? "",
+    p.parents.father,
+    p.parents.mother,
+  ]);
   return [
-    couple.groom.name,
-    couple.groom.fullName,
-    couple.groom.intro,
-    couple.bride.name,
-    couple.bride.fullName,
-    couple.bride.intro,
+    ...personStrings,
     wedding.displayDate,
     wedding.dayLabel,
     wedding.lunarDate,
@@ -28,6 +33,7 @@ function visibleStrings(): string[] {
     ...gallery.map((g) => g.alt),
     ...banks.flatMap((b) => [b.label, b.bank, b.accountName]),
     ...wishes.flatMap((w) => [w.name, w.message]),
+    ...dayTimeline.map((t) => t.label),
   ];
 }
 
@@ -76,6 +82,14 @@ describe("wedding-config: nội dung hiển thị", () => {
     ].filter((p): p is string => Boolean(p));
     for (const pos of positions) {
       expect(pos).toMatch(/^\d{1,3}% \d{1,3}%$/);
+    }
+  });
+
+  it("trình tự ngày cưới: mỗi mốc có giờ dạng HH:MM và nhãn không rỗng", () => {
+    expect(weddingConfig.dayTimeline.length).toBeGreaterThanOrEqual(3);
+    for (const step of weddingConfig.dayTimeline) {
+      expect(step.time, `mốc "${step.label}"`).toMatch(/^\d{2}:\d{2}$/);
+      expect(step.label.trim().length).toBeGreaterThan(0);
     }
   });
 });

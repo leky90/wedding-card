@@ -43,12 +43,12 @@ export function Cover() {
       )}
     >
       {/* khung viền kép + hoa 4 góc */}
-      <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-primary/25 md:inset-6" />
+      <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-gold/35 md:inset-6" />
       <div className="pointer-events-none absolute inset-5 rounded-[20px] border border-primary/10 md:inset-8" />
-      <CornerFloral className="pointer-events-none absolute left-5 top-5 h-20 w-20 text-primary/40 md:left-9 md:top-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute right-5 top-5 h-20 w-20 -scale-x-100 text-primary/40 md:right-9 md:top-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute bottom-5 left-5 h-20 w-20 -scale-y-100 text-primary/40 md:bottom-9 md:left-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute bottom-5 right-5 h-20 w-20 -scale-100 text-primary/40 md:bottom-9 md:right-9 md:h-36 md:w-36" />
+      <CornerFloral className="pointer-events-none absolute left-5 top-5 h-20 w-20 text-gold/60 md:left-9 md:top-9 md:h-36 md:w-36" />
+      <CornerFloral className="pointer-events-none absolute right-5 top-5 h-20 w-20 -scale-x-100 text-gold/60 md:right-9 md:top-9 md:h-36 md:w-36" />
+      <CornerFloral className="pointer-events-none absolute bottom-5 left-5 h-20 w-20 -scale-y-100 text-gold/60 md:bottom-9 md:left-9 md:h-36 md:w-36" />
+      <CornerFloral className="pointer-events-none absolute bottom-5 right-5 h-20 w-20 -scale-100 text-gold/60 md:bottom-9 md:right-9 md:h-36 md:w-36" />
 
       <div className="relative text-center">
         <p className="rise text-[11px] font-semibold uppercase tracking-[0.5em] text-primary md:text-xs" style={{ animationDelay: "150ms" }}>
@@ -59,9 +59,9 @@ export function Cover() {
           className="rise mt-6 flex flex-col items-center justify-center gap-1 font-script text-5xl leading-snug text-primary-deep md:flex-row md:gap-5 md:text-7xl"
           style={{ animationDelay: "320ms" }}
         >
-          <span>{groom.name}</span>
-          <Heart className="animate-heart h-6 w-6 fill-rose-mid text-rose-mid md:h-8 md:w-8" aria-hidden />
           <span>{bride.name}</span>
+          <Heart className="animate-heart h-6 w-6 fill-primary text-primary md:h-8 md:w-8" aria-hidden />
+          <span>{groom.name}</span>
         </div>
 
         <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-ink md:text-base" style={{ animationDelay: "480ms" }}>

@@ -2,10 +2,11 @@
 
 ## Mục tiêu
 
-Trang thiệp cưới online một trang (one-page), tham khảo bố cục mẫu
-`https://chungdoi.com/mau-thiep/hoa-moc-hong/demo`, tông màu chủ đạo **đỏ - trắng**,
-phong cách sang trọng, lãng mạn. Toàn bộ thông tin & hình ảnh là mockup, thay được
-về sau mà không đụng vào code giao diện.
+Trang thiệp cưới online một trang (one-page), phong cách sang trọng, lãng mạn.
+Tông màu lấy theo thiệp giấy thật của cặp đôi: **đỏ rượu vang (wine) + mauve bụi +
+gold, nền trắng** (token `--color-*` trong `src/index.css`). Nội dung (tên, gia đình,
+ngày giờ, địa điểm, lời cảm ơn, trình tự ngày cưới) lấy từ thiệp giấy; ảnh & STK
+thay được sau mà không đụng vào code giao diện.
 
 ## Yêu cầu
 
@@ -28,7 +29,7 @@ về sau mà không đụng vào code giao diện.
 4. **Couple** — giới thiệu chú rể & cô dâu.
 5. **Story** — timeline chuyện tình.
 6. **Gallery** — album masonry + lightbox.
-7. **Events** — sự kiện cưới + "Chỉ đường" / "Thêm vào lịch".
+7. **Events** — sự kiện cưới + "Chỉ đường" / "Thêm vào lịch" + trình tự ngày cưới (timeline).
 8. **GiftBox** — QR + STK, nút sao chép (fallback execCommand cho WebView).
 9. **RSVP** — form xác nhận → Supabase (fallback localStorage).
 10. **Guestbook** — sổ lưu bút → Supabase (fallback localStorage + lời chúc mẫu).

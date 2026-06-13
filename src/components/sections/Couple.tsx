@@ -30,6 +30,10 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
         </div>
       </div>
       <p className="mt-8 font-script text-4xl text-primary-deep md:text-5xl">{person.name}</p>
+      <p className="mt-1 font-display text-sm tracking-wide text-ink/70">
+        {person.fullName}
+        {person.lineage ? ` (${person.lineage})` : ""}
+      </p>
       <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-rose-mid">{role}</p>
       {(person.parents.father || person.parents.mother) && (
         <p className="mt-4 text-sm leading-relaxed text-muted">
@@ -38,6 +42,7 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
           Ông {person.parents.father} &amp; Bà {person.parents.mother}
         </p>
       )}
+      {person.hometown && <p className="mt-1.5 text-xs text-muted/85">{person.hometown}</p>}
       <p className="mt-4 max-w-xs text-sm italic leading-relaxed text-ink/80">“{person.intro}”</p>
     </div>
   );

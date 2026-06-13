@@ -15,7 +15,7 @@ import { weddingConfig } from "@/lib/wedding-config";
 import App from "./App";
 
 const { groom, bride } = weddingConfig.couple;
-document.title = `${groom.name} ♥ ${bride.name} | Thiệp Cưới`;
+document.title = `${bride.name} ♥ ${groom.name} | Thiệp Cưới`;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

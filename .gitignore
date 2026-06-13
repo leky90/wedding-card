@@ -19,3 +19,6 @@ npm-debug.log*
 .DS_Store
 coverage
 .vite
+
+# hook scratch file (per-turn summary)
+.claude/last-turn-summary.md

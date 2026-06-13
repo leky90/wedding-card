@@ -7,9 +7,9 @@ export function Footer() {
   const { groom, bride } = weddingConfig.couple;
 
   return (
-    <footer className="relative overflow-hidden bg-[linear-gradient(180deg,#8a0f29_0%,#5f0a1d_60%,#43071a_100%)] px-4 py-20 text-center text-white md:py-28">
-      <CornerFloral className="absolute -left-8 -top-8 h-44 w-44 text-white/10" />
-      <CornerFloral className="absolute -bottom-8 -right-8 h-44 w-44 -scale-100 text-white/10" />
+    <footer className="relative overflow-hidden bg-[linear-gradient(180deg,#7c1b22_0%,#56101a_58%,#3a0c13_100%)] px-4 py-20 text-center text-white md:py-28">
+      <CornerFloral className="absolute -left-8 -top-8 h-44 w-44 text-gold/20" />
+      <CornerFloral className="absolute -bottom-8 -right-8 h-44 w-44 -scale-100 text-gold/20" />
 
       <p className="font-script text-6xl text-rose-soft md:text-8xl">Thank you!</p>
       <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-white/80">
@@ -17,9 +17,9 @@ export function Footer() {
       </p>
 
       <p className="mt-10 flex items-center justify-center gap-3 font-display text-lg tracking-[0.25em] md:text-xl">
-        <span>{groom.name.toUpperCase()}</span>
-        <Heart className="animate-heart h-5 w-5 fill-rose-soft text-rose-soft" aria-hidden />
         <span>{bride.name.toUpperCase()}</span>
+        <Heart className="animate-heart h-5 w-5 fill-rose-soft text-rose-soft" aria-hidden />
+        <span>{groom.name.toUpperCase()}</span>
       </p>
       <p className="mt-3 text-xs tracking-[0.5em] text-white/60">{weddingConfig.wedding.displayDate}</p>
 

@@ -11,8 +11,12 @@ export interface Person {
   /** Tên gọi hiển thị lớn trên thiệp */
   name: string;
   fullName: string;
+  /** Thứ bậc trong gia đình, ví dụ "Quý Nam", "Út Nữ" (để trống "" sẽ ẩn) */
+  lineage?: string;
   /** Để trống ("") nếu chưa muốn hiển thị tên ba mẹ */
   parents: { father: string; mother: string };
+  /** Quê quán hiển thị dưới tên ba mẹ (để trống "" sẽ ẩn) */
+  hometown?: string;
   /** Lời giới thiệu ngắn */
   intro: string;
   image: string;
@@ -25,7 +29,7 @@ export interface WeddingEvent {
   name: string;
   /** Giờ diễn ra, ví dụ "09:00" */
   time: string;
-  /** Nhãn ngày hiển thị, ví dụ "Chủ Nhật, 20.12.2026" */
+  /** Nhãn ngày hiển thị, ví dụ "Thứ Năm, 16.07.2026" */
   dateLabel: string;
   /** Thời gian bắt đầu/kết thúc (ISO, múi giờ VN) — dùng cho nút "Thêm vào lịch" */
   startIso: string;
@@ -35,6 +39,14 @@ export interface WeddingEvent {
   /** Link Google Maps cho nút "Chỉ đường" */
   mapUrl: string;
   icon: "flower" | "rings" | "party";
+}
+
+/** Một mốc trong trình tự ngày cưới (timeline ngắn) */
+export interface TimelineStep {
+  /** Giờ dạng "HH:MM" */
+  time: string;
+  label: string;
+  icon: "welcome" | "rings" | "party" | "photo";
 }
 
 export interface StoryMilestone {
@@ -70,11 +82,11 @@ export interface Wish {
 export interface WeddingConfig {
   couple: { groom: Person; bride: Person };
   wedding: {
-    /** Mốc đếm ngược (thường là giờ tiệc chính) */
+    /** Mốc đếm ngược (thường là giờ hôn lễ chính) */
     dateIso: string;
     displayDate: string;
     dayLabel: string;
-    /** Ngày âm lịch — nhớ thay bằng ngày âm chính xác của bạn */
+    /** Ngày âm lịch */
     lunarDate: string;
     heroImage: string;
     heroImagePosition?: string;
@@ -85,6 +97,8 @@ export interface WeddingConfig {
     thankYou: string;
   };
   events: WeddingEvent[];
+  /** Trình tự ngày cưới hiển thị trong mục Sự Kiện */
+  dayTimeline: TimelineStep[];
   story: StoryMilestone[];
   gallery: GalleryPhoto[];
   banks: BankAccount[];
@@ -99,8 +113,10 @@ export const weddingConfig: WeddingConfig = {
   couple: {
     groom: {
       name: "Đình Kỳ",
-      fullName: "Đình Kỳ", // TODO: cập nhật họ tên đầy đủ
-      parents: { father: "", mother: "" }, // TODO: điền tên ba mẹ (để trống sẽ ẩn dòng này)
+      fullName: "Lê Đình Kỳ",
+      lineage: "Quý Nam",
+      parents: { father: "Lê Đình Đức", mother: "Châu Thị Bạch Yến" },
+      hometown: "Chi Lăng, Phường Phú Xuân, TP. Huế",
       intro:
         "Một người trầm tính, thích những điều giản dị. Từ ngày có Quỳnh, niềm vui mỗi ngày của Kỳ là được nhìn thấy nụ cười của cô ấy.",
       image: "/images/groom.jpg",
@@ -108,8 +124,10 @@ export const weddingConfig: WeddingConfig = {
     },
     bride: {
       name: "Như Quỳnh",
-      fullName: "Như Quỳnh", // TODO: cập nhật họ tên đầy đủ
-      parents: { father: "", mother: "" }, // TODO: điền tên ba mẹ (để trống sẽ ẩn dòng này)
+      fullName: "Nguyễn Thị Như Quỳnh",
+      lineage: "Út Nữ",
+      parents: { father: "Nguyễn Ngọc Mạnh", mother: "Hoàng Thị Tĩnh" },
+      hometown: "Lưỡng Kim, Xã Nam Cửa Việt, Quảng Trị",
       intro:
         "Cô gái nhỏ yêu hoa và những điều dịu dàng. Quỳnh tin rằng hạnh phúc là một bữa cơm ấm, có đủ hai người.",
       image: "/images/bride.jpg",
@@ -118,76 +136,85 @@ export const weddingConfig: WeddingConfig = {
   },
 
   wedding: {
-    // TODO: thay bằng ngày cưới thật (giờ tiệc chính để đếm ngược)
-    dateIso: "2026-12-20T18:00:00+07:00",
-    displayDate: "20 . 12 . 2026",
-    dayLabel: "Chủ Nhật",
-    lunarDate: "(Tức ngày 12 tháng 11 năm Bính Ngọ)",
+    // Đếm ngược tới Lễ Vu Quy lúc 08:00 sáng 16.07.2026
+    dateIso: "2026-07-16T08:00:00+07:00",
+    displayDate: "16 . 07 . 2026",
+    dayLabel: "Thứ Năm",
+    lunarDate: "(Nhằm ngày 03 tháng 06 năm Bính Ngọ)",
     heroImage: "/images/hero-couple.jpg",
     heroImagePosition: "50% 18%",
   },
 
   invitation: {
     headline: "Trân trọng kính mời",
-    message:
-      "Sự hiện diện của bạn là niềm vinh hạnh lớn nhất đối với gia đình chúng tôi. Rất mong được đón tiếp bạn trong ngày vui của hai chúng mình!",
+    message: "Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi.",
     thankYou:
-      "Cảm ơn bạn đã dành thời gian đến chung vui cùng hai gia đình. Chúc bạn luôn bình an, hạnh phúc và gặp nhiều may mắn trong cuộc sống.",
+      "Hành trình 10 năm yêu thương, từ những ngày đầu còn bỡ ngỡ, qua bao lần giận hờn rồi lại tha thứ, cùng nhau vun đắp và trưởng thành, đã đưa Như Quỳnh và Đình Kỳ đến ngày hôm nay. Cảm ơn vì trong suốt chặng đường ấy luôn có gia đình, người thân và bạn bè ủng hộ, chúc phúc cho tình yêu này.",
   },
 
   events: [
     {
-      id: "vu-quy",
-      name: "Lễ Vu Quy",
-      time: "09:00",
-      dateLabel: "Chủ Nhật, 20.12.2026",
-      startIso: "2026-12-20T09:00:00+07:00",
-      endIso: "2026-12-20T11:00:00+07:00",
-      venue: "Tư Gia Nhà Gái",
-      address: "123 Đường Hoa Hồng, Phường 5, Quận Bình Thạnh, TP. Hồ Chí Minh",
-      mapUrl: "https://maps.google.com/?q=123+Duong+Hoa+Hong+Binh+Thanh",
-      icon: "flower",
+      id: "tiec-than-mat",
+      name: "Tiệc Thân Mật",
+      time: "16:00",
+      dateLabel: "Thứ Tư, 15.07.2026",
+      startIso: "2026-07-15T16:00:00+07:00",
+      endIso: "2026-07-15T19:00:00+07:00",
+      venue: "Hội Trường HTX Lưỡng Kim",
+      address: "Khu vực 1, Lưỡng Kim, Nam Cửa Việt, Quảng Trị",
+      mapUrl:
+        "https://www.google.com/maps/search/?api=1&query=H%E1%BB%99i+tr%C6%B0%E1%BB%9Dng+HTX+L%C6%B0%E1%BB%A1ng+Kim+Nam+C%E1%BB%ADa+Vi%E1%BB%87t+Qu%E1%BA%A3ng+Tr%E1%BB%8B",
+      icon: "party",
     },
     {
-      id: "thanh-hon",
-      name: "Lễ Thành Hôn",
-      time: "11:30",
-      dateLabel: "Chủ Nhật, 20.12.2026",
-      startIso: "2026-12-20T11:30:00+07:00",
-      endIso: "2026-12-20T13:30:00+07:00",
-      venue: "Tư Gia Nhà Trai",
-      address: "456 Đường Mai Anh Đào, Phường 9, TP. Đà Lạt, Lâm Đồng",
-      mapUrl: "https://maps.google.com/?q=456+Duong+Mai+Anh+Dao+Da+Lat",
-      icon: "rings",
+      id: "vu-quy",
+      name: "Lễ Vu Quy",
+      time: "08:00",
+      dateLabel: "Thứ Năm, 16.07.2026",
+      startIso: "2026-07-16T08:00:00+07:00",
+      endIso: "2026-07-16T10:00:00+07:00",
+      venue: "Tư Gia Nhà Gái",
+      address: "Lưỡng Kim, Xã Nam Cửa Việt, Quảng Trị",
+      mapUrl:
+        "https://www.google.com/maps/search/?api=1&query=L%C6%B0%E1%BB%A1ng+Kim+Nam+C%E1%BB%ADa+Vi%E1%BB%87t+Qu%E1%BA%A3ng+Tr%E1%BB%8B",
+      icon: "flower",
     },
     {
       id: "tiec-cuoi",
       name: "Tiệc Mừng Cưới",
-      time: "18:00",
-      dateLabel: "Chủ Nhật, 20.12.2026",
-      startIso: "2026-12-20T18:00:00+07:00",
-      endIso: "2026-12-20T21:00:00+07:00",
-      venue: "Trung Tâm Tiệc Cưới Diamond Palace, Sảnh Ruby",
-      address: "789 Điện Biên Phủ, Quận 3, TP. Hồ Chí Minh",
-      mapUrl: "https://maps.google.com/?q=Diamond+Palace+Dien+Bien+Phu",
-      icon: "party",
+      time: "11:00",
+      dateLabel: "Thứ Năm, 16.07.2026",
+      startIso: "2026-07-16T11:00:00+07:00",
+      endIso: "2026-07-16T14:00:00+07:00",
+      venue: "Hội Trường HTX Lưỡng Kim",
+      address: "Khu vực 1, Lưỡng Kim, Nam Cửa Việt, Quảng Trị",
+      mapUrl:
+        "https://www.google.com/maps/search/?api=1&query=H%E1%BB%99i+tr%C6%B0%E1%BB%9Dng+HTX+L%C6%B0%E1%BB%A1ng+Kim+Nam+C%E1%BB%ADa+Vi%E1%BB%87t+Qu%E1%BA%A3ng+Tr%E1%BB%8B",
+      icon: "rings",
     },
+  ],
+
+  dayTimeline: [
+    { time: "10:30", label: "Đón khách", icon: "welcome" },
+    { time: "11:00", label: "Lễ Cưới", icon: "rings" },
+    { time: "11:30", label: "Tiệc Cưới", icon: "party" },
+    { time: "13:00", label: "Chụp Hình", icon: "photo" },
   ],
 
   story: [
     {
-      year: "2019",
+      year: "2016",
       title: "Lần đầu gặp gỡ",
       description:
-        "Một buổi chiều cuối năm, Kỳ gặp Quỳnh qua lời giới thiệu của một người bạn chung. Cái gật đầu chào hôm ấy, ai ngờ lại là mở đầu của cả một đời.",
+        "Mười năm trước, Kỳ và Quỳnh gặp nhau khi cả hai còn rất trẻ. Cái gật đầu chào ngày ấy, ai ngờ lại là khởi đầu của cả một đời.",
       image: "/images/story-1.jpg",
       imagePosition: "50% 30%",
     },
     {
-      year: "2021",
-      title: "Lời tỏ tình",
+      year: "2019",
+      title: "Về chung một đội",
       description:
-        "Sau hai năm làm bạn, Kỳ lấy hết can đảm nói ra ba từ quan trọng nhất. Quỳnh chỉ cười, và nụ cười ấy chính là câu trả lời.",
+        "Qua những ngày bỡ ngỡ, qua cả những lần giận hờn rồi lại tha thứ, hai đứa chọn nắm tay nhau đi tiếp, cùng vun đắp và trưởng thành.",
       image: "/images/story-2.jpg",
       imagePosition: "52% 35%",
     },
@@ -203,7 +230,7 @@ export const weddingConfig: WeddingConfig = {
       year: "2026",
       title: "Về chung một nhà",
       description:
-        "Và hôm nay, chúng mình chính thức gọi nhau là gia đình. Cảm ơn bạn đã là một phần trong hành trình hạnh phúc này.",
+        "Và hôm nay, sau mười năm yêu thương, chúng mình chính thức gọi nhau là gia đình. Cảm ơn bạn đã là một phần của hành trình này.",
       image: "/images/story-4.jpg",
       imagePosition: "50% 55%",
     },
@@ -225,19 +252,19 @@ export const weddingConfig: WeddingConfig = {
       label: "Mừng cưới Chú Rể",
       bank: "Vietcombank", // TODO: cập nhật ngân hàng + chi nhánh
       accountNumber: "0123456789", // TODO: số tài khoản thật
-      accountName: "DINH KY",
+      accountName: "LE DINH KY",
       qrImage: "/images/qr-groom.svg", // TODO: thay QR thật
     },
     {
       label: "Mừng cưới Cô Dâu",
       bank: "Techcombank", // TODO: cập nhật ngân hàng + chi nhánh
       accountNumber: "9876543210", // TODO: số tài khoản thật
-      accountName: "NHU QUYNH",
+      accountName: "NGUYEN THI NHU QUYNH",
       qrImage: "/images/qr-bride.svg", // TODO: thay QR thật
     },
   ],
 
-  rsvp: { deadline: "10.12.2026" },
+  rsvp: { deadline: "10.07.2026" },
 
   wishes: [
     {

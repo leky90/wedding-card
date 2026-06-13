@@ -40,9 +40,9 @@ export function GiftBox() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(165deg,#8a0f29_0%,#6d0b22_55%,#4c0817_100%)] px-4 py-16 text-white md:py-24">
-      <CornerFloral className="absolute -left-6 -top-6 h-40 w-40 text-white/10 md:h-56 md:w-56" />
-      <CornerFloral className="absolute -bottom-6 -right-6 h-40 w-40 -scale-100 text-white/10 md:h-56 md:w-56" />
+    <section className="relative overflow-hidden bg-[linear-gradient(165deg,#7c1b22_0%,#5e141b_55%,#420c12_100%)] px-4 py-16 text-white md:py-24">
+      <CornerFloral className="absolute -left-6 -top-6 h-40 w-40 text-gold/15 md:h-56 md:w-56" />
+      <CornerFloral className="absolute -bottom-6 -right-6 h-40 w-40 -scale-100 text-gold/15 md:h-56 md:w-56" />
       <span
         aria-hidden
         className="absolute -right-4 top-8 select-none font-script text-7xl text-white/[0.06] md:text-9xl"

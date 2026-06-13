@@ -1,16 +1,24 @@
-import { CalendarPlus, Flower2, MapPin, Wine } from "lucide-react";
+import { CalendarPlus, Camera, Flower2, MapPin, UtensilsCrossed, Users, Wine } from "lucide-react";
 
 import { RingsIcon } from "@/components/ui/Ornaments";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildGoogleCalendarUrl } from "@/lib/countdown";
-import { weddingConfig, type WeddingEvent } from "@/lib/wedding-config";
+import { weddingConfig, type TimelineStep, type WeddingEvent } from "@/lib/wedding-config";
 
 function EventIcon({ icon }: { icon: WeddingEvent["icon"] }) {
   const cls = "h-6 w-6";
   if (icon === "flower") return <Flower2 className={cls} aria-hidden />;
   if (icon === "rings") return <RingsIcon className={cls} />;
   return <Wine className={cls} aria-hidden />;
+}
+
+function TimelineIcon({ icon }: { icon: TimelineStep["icon"] }) {
+  const cls = "h-5 w-5";
+  if (icon === "welcome") return <Users className={cls} aria-hidden />;
+  if (icon === "rings") return <RingsIcon className={cls} />;
+  if (icon === "photo") return <Camera className={cls} aria-hidden />;
+  return <UtensilsCrossed className={cls} aria-hidden />;
 }
 
 export function Events() {
@@ -29,7 +37,7 @@ export function Events() {
       <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3 md:gap-6">
         {weddingConfig.events.map((event, i) => (
           <Reveal key={event.id} delay={i * 90} className="h-full">
-            <article className="flex h-full flex-col items-center rounded-2xl border border-rose-soft/50 bg-white p-6 text-center shadow-card transition duration-300 hover:-translate-y-1.5 md:p-7">
+            <article className="flex h-full flex-col items-center rounded-2xl border border-rose-soft/60 bg-white p-6 text-center shadow-card transition duration-300 hover:-translate-y-1.5 md:p-7">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blush text-primary ring-1 ring-rose-soft/70">
                 <EventIcon icon={event.icon} />
               </span>
@@ -50,7 +58,7 @@ export function Events() {
                 </a>
                 <a
                   href={buildGoogleCalendarUrl({
-                    title: `${event.name} — ${groom.name} & ${bride.name}`,
+                    title: `${event.name} — ${bride.name} & ${groom.name}`,
                     startIso: event.startIso,
                     endIso: event.endIso,
                     location: `${event.venue}, ${event.address}`,
@@ -66,6 +74,28 @@ export function Events() {
           </Reveal>
         ))}
       </div>
+
+      {/* Trình tự ngày cưới — mô phỏng timeline trong thiệp giấy */}
+      <Reveal className="mx-auto mt-14 max-w-2xl md:mt-20">
+        <p className="mb-8 text-center font-script text-3xl text-rose-mid md:text-4xl">
+          Trình tự ngày cưới
+        </p>
+        <ol className="relative grid grid-cols-2 gap-y-9 sm:grid-cols-4">
+          <span
+            aria-hidden
+            className="absolute inset-x-8 top-7 hidden h-px bg-rose-soft sm:block"
+          />
+          {weddingConfig.dayTimeline.map((step) => (
+            <li key={step.label} className="relative flex flex-col items-center text-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full border border-rose-soft bg-white text-primary shadow-sm">
+                <TimelineIcon icon={step.icon} />
+              </span>
+              <p className="mt-3 font-display text-lg font-semibold text-primary">{step.time}</p>
+              <p className="mt-0.5 text-xs tracking-wide text-muted">{step.label}</p>
+            </li>
+          ))}
+        </ol>
+      </Reveal>
     </section>
   );
 }

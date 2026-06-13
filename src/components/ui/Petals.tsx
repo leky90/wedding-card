@@ -15,18 +15,18 @@ interface PetalSpec {
  * không lệch hydration. Tối đa 12 cánh hoa cho nhẹ máy yếu.
  */
 const PETALS: PetalSpec[] = [
-  { left: "4%", size: 16, delay: 0, dur: 14, drift: 40, opacity: 0.55, color: "#e89aa8" },
-  { left: "12%", size: 12, delay: 3.5, dur: 17, drift: -30, opacity: 0.45, color: "#d4677d" },
-  { left: "21%", size: 18, delay: 7, dur: 13, drift: 55, opacity: 0.6, color: "#f3c6ce" },
-  { left: "30%", size: 11, delay: 1.5, dur: 18, drift: -45, opacity: 0.4, color: "#e89aa8" },
-  { left: "39%", size: 15, delay: 9, dur: 15, drift: 35, opacity: 0.55, color: "#d4677d" },
-  { left: "48%", size: 13, delay: 5, dur: 16, drift: -25, opacity: 0.5, color: "#f3c6ce" },
-  { left: "57%", size: 17, delay: 11, dur: 14, drift: 50, opacity: 0.6, color: "#e89aa8" },
-  { left: "66%", size: 12, delay: 2.5, dur: 18, drift: -40, opacity: 0.45, color: "#f3c6ce" },
-  { left: "74%", size: 16, delay: 8, dur: 13.5, drift: 30, opacity: 0.55, color: "#d4677d" },
-  { left: "82%", size: 11, delay: 4.5, dur: 17, drift: -35, opacity: 0.4, color: "#e89aa8" },
-  { left: "90%", size: 15, delay: 10, dur: 15, drift: 45, opacity: 0.55, color: "#f3c6ce" },
-  { left: "96%", size: 13, delay: 6, dur: 16, drift: -50, opacity: 0.5, color: "#d4677d" },
+  { left: "4%", size: 16, delay: 0, dur: 14, drift: 40, opacity: 0.55, color: "#c79b98" },
+  { left: "12%", size: 12, delay: 3.5, dur: 17, drift: -30, opacity: 0.45, color: "#a86b68" },
+  { left: "21%", size: 18, delay: 7, dur: 13, drift: 55, opacity: 0.6, color: "#cdb389" },
+  { left: "30%", size: 11, delay: 1.5, dur: 18, drift: -45, opacity: 0.4, color: "#c79b98" },
+  { left: "39%", size: 15, delay: 9, dur: 15, drift: 35, opacity: 0.55, color: "#a86b68" },
+  { left: "48%", size: 13, delay: 5, dur: 16, drift: -25, opacity: 0.5, color: "#cdb389" },
+  { left: "57%", size: 17, delay: 11, dur: 14, drift: 50, opacity: 0.6, color: "#c79b98" },
+  { left: "66%", size: 12, delay: 2.5, dur: 18, drift: -40, opacity: 0.45, color: "#cdb389" },
+  { left: "74%", size: 16, delay: 8, dur: 13.5, drift: 30, opacity: 0.55, color: "#a86b68" },
+  { left: "82%", size: 11, delay: 4.5, dur: 17, drift: -35, opacity: 0.4, color: "#c79b98" },
+  { left: "90%", size: 15, delay: 10, dur: 15, drift: 45, opacity: 0.55, color: "#cdb389" },
+  { left: "96%", size: 13, delay: 6, dur: 16, drift: -50, opacity: 0.5, color: "#a86b68" },
 ];
 
 /** Lớp cánh hoa rơi phủ toàn trang — thuần CSS, không cần JS. */
