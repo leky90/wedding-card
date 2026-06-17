@@ -30,10 +30,15 @@ thay được sau mà không đụng vào code giao diện.
 5. **Story** — timeline chuyện tình.
 6. **Gallery** — album masonry + lightbox.
 7. **Events** — sự kiện cưới + "Chỉ đường" / "Thêm vào lịch" + trình tự ngày cưới (timeline).
-8. **GiftBox** — QR + STK, nút sao chép (fallback execCommand cho WebView).
-9. **RSVP** — form xác nhận → Supabase (fallback localStorage).
-10. **Guestbook** — sổ lưu bút → Supabase (fallback localStorage + lời chúc mẫu).
-11. **Footer** — lời cảm ơn.
+8. **RSVP** — form xác nhận → Supabase (fallback localStorage).
+9. **Guestbook** — sổ lưu bút → Supabase (fallback localStorage + lời chúc mẫu).
+10. **Footer / Lời Cảm Ơn** — mục đóng nền wine đậm: đôi nhẫn lồng nhau, lời cảm ơn
+    (2 đoạn theo thiệp giấy) và chữ ký script tên cặp đôi.
+
+> Mục **GiftBox** (STK + QR mừng cưới) đã gỡ bỏ theo yêu cầu — thiệp giấy không có
+> phần này. Tông màu bám theo thiệp giấy: nền trắng + đỏ rượu (wine #7c1b22), số ngày
+> cưới cỡ lớn màu rose-gold (#c79a92), hoạ tiết gold dùng tiết chế (1 thẻ sự kiện).
+> Chữ viết tay (Great Vibes) chỉ dành cho tên cặp đôi và chữ ký cuối trang.
 
 Phần tử nổi: nút nhạc nền, nút lên đầu trang, lớp cánh hoa rơi.
 

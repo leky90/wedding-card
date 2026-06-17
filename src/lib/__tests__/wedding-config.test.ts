@@ -9,7 +9,7 @@ import { weddingConfig } from "@/lib/wedding-config";
 
 /** Gom mọi chuỗi khách sẽ NHÌN THẤY trên thiệp */
 function visibleStrings(): string[] {
-  const { couple, wedding, invitation, events, story, gallery, banks, wishes, dayTimeline } =
+  const { couple, wedding, invitation, events, story, gallery, wishes, dayTimeline } =
     weddingConfig;
   const personStrings = [couple.groom, couple.bride].flatMap((p) => [
     p.name,
@@ -27,11 +27,11 @@ function visibleStrings(): string[] {
     wedding.lunarDate,
     invitation.headline,
     invitation.message,
-    invitation.thankYou,
-    ...events.flatMap((e) => [e.name, e.dateLabel, e.venue, e.address]),
+    invitation.thankYou1,
+    invitation.thankYou2,
+    ...events.flatMap((e) => [e.name, e.dateLabel, e.lunarLabel ?? "", e.venue, e.address]),
     ...story.flatMap((s) => [s.year, s.title, s.description]),
     ...gallery.map((g) => g.alt),
-    ...banks.flatMap((b) => [b.label, b.bank, b.accountName]),
     ...wishes.flatMap((w) => [w.name, w.message]),
     ...dayTimeline.map((t) => t.label),
   ];
@@ -42,6 +42,11 @@ describe("wedding-config: nội dung hiển thị", () => {
     for (const text of visibleStrings()) {
       expect(text, `Chuỗi vi phạm: "${text}"`).not.toMatch(/[—–]/);
     }
+  });
+
+  it("lời cảm ơn có đủ hai đoạn, không rỗng", () => {
+    expect(weddingConfig.invitation.thankYou1.trim().length).toBeGreaterThan(0);
+    expect(weddingConfig.invitation.thankYou2.trim().length).toBeGreaterThan(0);
   });
 
   it("ngày cưới và thời gian sự kiện là ISO hợp lệ, kết thúc sau bắt đầu", () => {
@@ -62,7 +67,6 @@ describe("wedding-config: nội dung hiển thị", () => {
       weddingConfig.couple.bride.image,
       ...weddingConfig.story.map((s) => s.image),
       ...weddingConfig.gallery.map((g) => g.src),
-      ...weddingConfig.banks.map((b) => b.qrImage),
     ];
     for (const path of imagePaths) {
       expect(path).toMatch(/^\/images\//);

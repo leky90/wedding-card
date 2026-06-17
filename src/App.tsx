@@ -5,7 +5,6 @@ import { Couple } from "@/components/sections/Couple";
 import { Events } from "@/components/sections/Events";
 import { Footer } from "@/components/sections/Footer";
 import { Gallery } from "@/components/sections/Gallery";
-import { GiftBox } from "@/components/sections/GiftBox";
 import { Guestbook } from "@/components/sections/Guestbook";
 import { Hero } from "@/components/sections/Hero";
 import { Rsvp } from "@/components/sections/Rsvp";
@@ -24,7 +23,6 @@ export default function App() {
         <Story />
         <Gallery />
         <Events />
-        <GiftBox />
         <Rsvp />
         <Guestbook />
       </main>

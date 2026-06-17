@@ -5,10 +5,15 @@
   --color-primary: #94152a;
   --color-primary-deep: #7c1b22;
   --color-primary-dark: #56101a;
-  --color-rose-mid: #b07b78;
+  /* Rose đậm vừa đủ đạt WCAG AA (~5:1) cho nhãn nhỏ in hoa trên nền sáng */
+  --color-rose-mid: #9c5f5c;
   --color-rose-soft: #e6d6d2;
   --color-gold: #b89a6e;
-  --color-blush: #f8efeb;
+  /* Rose-gold: dùng cho KHỐI SỐ NGÀY CƯỚI cỡ lớn — mang tính trang trí (số ngày
+     cũng hiện ở dạng chữ dễ đọc tại Cover/Footer), nên tương phản thấp như thiệp giấy */
+  --color-rosegold: #c79a92;
+  --color-rosegold-ink: #b07a6b;
+  --color-blush: #faf6f3;
   --color-cream: #fffdfb;
   --color-ink: #3a2226;
   --color-muted: #8a6a68;

@@ -1,10 +1,9 @@
 /**
  * ⚙️ FILE CẤU HÌNH THIỆP CƯỚI
  *
- * Toàn bộ thông tin hiển thị trên thiệp (tên, ngày giờ, địa điểm, ảnh,
- * số tài khoản...) đều nằm ở đây. Chỉ cần sửa file này và thay ảnh trong
- * thư mục /public/images là có thiệp của riêng bạn — không cần đụng vào
- * code giao diện.
+ * Toàn bộ thông tin hiển thị trên thiệp (tên, ngày giờ, địa điểm, ảnh...)
+ * đều nằm ở đây. Chỉ cần sửa file này và thay ảnh trong thư mục
+ * /public/images là có thiệp của riêng bạn — không cần đụng vào code giao diện.
  */
 
 export interface Person {
@@ -31,6 +30,8 @@ export interface WeddingEvent {
   time: string;
   /** Nhãn ngày hiển thị, ví dụ "Thứ Năm, 16.07.2026" */
   dateLabel: string;
+  /** Ngày âm lịch riêng của sự kiện, ví dụ "Nhằm 03/06 Bính Ngọ" (để trống sẽ ẩn) */
+  lunarLabel?: string;
   /** Thời gian bắt đầu/kết thúc (ISO, múi giờ VN) — dùng cho nút "Thêm vào lịch" */
   startIso: string;
   endIso: string;
@@ -65,15 +66,6 @@ export interface GalleryPhoto {
   height: number;
 }
 
-export interface BankAccount {
-  /** Nhãn hiển thị, ví dụ "Mừng cưới Chú Rể" */
-  label: string;
-  bank: string;
-  accountNumber: string;
-  accountName: string;
-  qrImage: string;
-}
-
 export interface Wish {
   name: string;
   message: string;
@@ -82,7 +74,7 @@ export interface Wish {
 export interface WeddingConfig {
   couple: { groom: Person; bride: Person };
   wedding: {
-    /** Mốc đếm ngược (thường là giờ hôn lễ chính) */
+    /** Mốc đếm ngược (giờ hôn lễ chính) */
     dateIso: string;
     displayDate: string;
     dayLabel: string;
@@ -94,14 +86,16 @@ export interface WeddingConfig {
   invitation: {
     headline: string;
     message: string;
-    thankYou: string;
+    /** Lời cảm ơn — đoạn 1 (hành trình + biết ơn) */
+    thankYou1: string;
+    /** Lời cảm ơn — đoạn 2 (lời mời dự lễ Vu Quy) */
+    thankYou2: string;
   };
   events: WeddingEvent[];
   /** Trình tự ngày cưới hiển thị trong mục Sự Kiện */
   dayTimeline: TimelineStep[];
   story: StoryMilestone[];
   gallery: GalleryPhoto[];
-  banks: BankAccount[];
   rsvp: { deadline: string };
   /** Lời chúc mẫu hiển thị sẵn trong sổ lưu bút */
   wishes: Wish[];
@@ -116,7 +110,7 @@ export const weddingConfig: WeddingConfig = {
       fullName: "Lê Đình Kỳ",
       lineage: "Quý Nam",
       parents: { father: "Lê Đình Đức", mother: "Châu Thị Bạch Yến" },
-      hometown: "Chi Lăng, Phường Phú Xuân, TP. Huế",
+      hometown: "Chi Lăng, Phường Phú Xuân, Thành phố Huế",
       intro:
         "Một người trầm tính, thích những điều giản dị. Từ ngày có Quỳnh, niềm vui mỗi ngày của Kỳ là được nhìn thấy nụ cười của cô ấy.",
       image: "/images/groom.jpg",
@@ -127,7 +121,7 @@ export const weddingConfig: WeddingConfig = {
       fullName: "Nguyễn Thị Như Quỳnh",
       lineage: "Út Nữ",
       parents: { father: "Nguyễn Ngọc Mạnh", mother: "Hoàng Thị Tĩnh" },
-      hometown: "Lưỡng Kim, Xã Nam Cửa Việt, Quảng Trị",
+      hometown: "Lưỡng Kim, Xã Nam Cửa Việt, Tỉnh Quảng Trị",
       intro:
         "Cô gái nhỏ yêu hoa và những điều dịu dàng. Quỳnh tin rằng hạnh phúc là một bữa cơm ấm, có đủ hai người.",
       image: "/images/bride.jpg",
@@ -136,8 +130,8 @@ export const weddingConfig: WeddingConfig = {
   },
 
   wedding: {
-    // Đếm ngược tới Lễ Vu Quy lúc 08:00 sáng 16.07.2026
-    dateIso: "2026-07-16T08:00:00+07:00",
+    // Đếm ngược tới Lễ Vu Quy lúc 09:00 sáng 16.07.2026 (theo thiệp giấy)
+    dateIso: "2026-07-16T09:00:00+07:00",
     displayDate: "16 . 07 . 2026",
     dayLabel: "Thứ Năm",
     lunarDate: "(Nhằm ngày 03 tháng 06 năm Bính Ngọ)",
@@ -148,8 +142,10 @@ export const weddingConfig: WeddingConfig = {
   invitation: {
     headline: "Trân trọng kính mời",
     message: "Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi.",
-    thankYou:
-      "Hành trình 10 năm yêu thương, từ những ngày đầu còn bỡ ngỡ, qua bao lần giận hờn rồi lại tha thứ, cùng nhau vun đắp và trưởng thành, đã đưa Như Quỳnh và Đình Kỳ đến ngày hôm nay. Cảm ơn vì trong suốt chặng đường ấy luôn có gia đình, người thân và bạn bè ủng hộ, chúc phúc cho tình yêu này.",
+    thankYou1:
+      "Hành trình 10 năm yêu thương, từ những ngày đầu còn bỡ ngỡ, qua bao lần giận hờn rồi lại tha thứ, cùng nhau vun đắp và trưởng thành, đã đưa Như Quỳnh và Đình Kỳ đến ngày hôm nay. Cảm ơn vì trong suốt chặng đường ấy luôn có gia đình, người thân, bạn bè ủng hộ và chúc phúc cho tình yêu này.",
+    thankYou2:
+      "Hôn lễ này đối với chúng con, chúng mình là một cột mốc tình yêu to lớn. Chính vì vậy, Như Quỳnh và Đình Kỳ xin kính mời Ông Bà, Cô Bác, Anh chị em bạn bè đến tham dự lễ Vu Quy để cùng khóc, cùng cười và cùng chứng kiến niềm hạnh phúc trọn vẹn nhất trong ngày trọng đại này.",
   },
 
   events: [
@@ -158,6 +154,7 @@ export const weddingConfig: WeddingConfig = {
       name: "Tiệc Thân Mật",
       time: "16:00",
       dateLabel: "Thứ Tư, 15.07.2026",
+      lunarLabel: "Nhằm 02/06 Bính Ngọ",
       startIso: "2026-07-15T16:00:00+07:00",
       endIso: "2026-07-15T19:00:00+07:00",
       venue: "Hội Trường HTX Lưỡng Kim",
@@ -169,12 +166,13 @@ export const weddingConfig: WeddingConfig = {
     {
       id: "vu-quy",
       name: "Lễ Vu Quy",
-      time: "08:00",
+      time: "09:00",
       dateLabel: "Thứ Năm, 16.07.2026",
-      startIso: "2026-07-16T08:00:00+07:00",
-      endIso: "2026-07-16T10:00:00+07:00",
+      lunarLabel: "Nhằm 03/06 Bính Ngọ",
+      startIso: "2026-07-16T09:00:00+07:00",
+      endIso: "2026-07-16T11:00:00+07:00",
       venue: "Tư Gia Nhà Gái",
-      address: "Lưỡng Kim, Xã Nam Cửa Việt, Quảng Trị",
+      address: "Lưỡng Kim, Xã Nam Cửa Việt, Tỉnh Quảng Trị",
       mapUrl:
         "https://www.google.com/maps/search/?api=1&query=L%C6%B0%E1%BB%A1ng+Kim+Nam+C%E1%BB%ADa+Vi%E1%BB%87t+Qu%E1%BA%A3ng+Tr%E1%BB%8B",
       icon: "flower",
@@ -184,6 +182,7 @@ export const weddingConfig: WeddingConfig = {
       name: "Tiệc Mừng Cưới",
       time: "11:00",
       dateLabel: "Thứ Năm, 16.07.2026",
+      lunarLabel: "Nhằm 03/06 Bính Ngọ",
       startIso: "2026-07-16T11:00:00+07:00",
       endIso: "2026-07-16T14:00:00+07:00",
       venue: "Hội Trường HTX Lưỡng Kim",
@@ -245,23 +244,6 @@ export const weddingConfig: WeddingConfig = {
     { src: "/images/gallery-6.jpg", alt: "Hai đứa mình trong studio", width: 1015, height: 1600 },
     { src: "/images/gallery-7.jpg", alt: "Giữa vườn hoa pastel", width: 1065, height: 1600 },
     { src: "/images/gallery-8.jpg", alt: "Chiều vàng bên thành cổ", width: 1013, height: 1600 },
-  ],
-
-  banks: [
-    {
-      label: "Mừng cưới Chú Rể",
-      bank: "Vietcombank", // TODO: cập nhật ngân hàng + chi nhánh
-      accountNumber: "0123456789", // TODO: số tài khoản thật
-      accountName: "LE DINH KY",
-      qrImage: "/images/qr-groom.svg", // TODO: thay QR thật
-    },
-    {
-      label: "Mừng cưới Cô Dâu",
-      bank: "Techcombank", // TODO: cập nhật ngân hàng + chi nhánh
-      accountNumber: "9876543210", // TODO: số tài khoản thật
-      accountName: "NGUYEN THI NHU QUYNH",
-      qrImage: "/images/qr-bride.svg", // TODO: thay QR thật
-    },
   ],
 
   rsvp: { deadline: "10.07.2026" },

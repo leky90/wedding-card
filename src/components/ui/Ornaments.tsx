@@ -59,26 +59,28 @@ export function HeartDivider(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Cụm hoa nhỏ đặt trên đỉnh khung ảnh vòm. */
-export function BloomCluster(props: SVGProps<SVGSVGElement>) {
+/** Đôi nhẫn cưới lồng nhau + tia lấp lánh — dùng cho mục "Lời Cảm Ơn". */
+export function WeddingRings(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 140 44" fill="none" aria-hidden="true" {...props}>
-      <path d="M8 34 Q 70 10 132 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity=".7" />
-      <path d="M40 27 q -6 -10 -16 -10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity=".6" />
-      <path d="M100 27 q 6 -10 16 -10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity=".6" />
-      <g fill="currentColor">
-        <circle cx="70" cy="16" r="4" opacity=".9" />
-        <circle cx="63" cy="13" r="3.2" opacity=".65" />
-        <circle cx="77" cy="13" r="3.2" opacity=".65" />
-        <circle cx="66" cy="21" r="3.2" opacity=".65" />
-        <circle cx="74" cy="21" r="3.2" opacity=".65" />
-        <circle cx="24" cy="17" r="3.4" opacity=".8" />
-        <circle cx="116" cy="17" r="3.4" opacity=".8" />
-        <circle cx="44" cy="25" r="2.6" opacity=".55" />
-        <circle cx="96" cy="25" r="2.6" opacity=".55" />
-      </g>
-      <path d="M52 30 q 6 -8 14 -7 q -4 9 -14 7z" fill="currentColor" opacity=".5" />
-      <path d="M88 30 q -6 -8 -14 -7 q 4 9 14 7z" fill="currentColor" opacity=".5" />
+    <svg
+      viewBox="0 0 80 64"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      {/* tia lấp lánh */}
+      <path d="M21 13 V6 M17.5 9.5 H24.5" opacity=".85" />
+      <path d="M61 17 V12 M58.5 14.5 H63.5" opacity=".7" />
+      <path d="M41 9 V4 M38.5 6.5 H43.5" opacity=".6" />
+      {/* hai nhẫn lồng nhau */}
+      <circle cx="33" cy="41" r="15" />
+      <circle cx="49" cy="41" r="15" />
+      {/* viên đá nhỏ trên nhẫn trái */}
+      <path d="M33 26 l-3.4 -4.2 3.4 -4.2 3.4 4.2 z" fill="currentColor" stroke="none" />
     </svg>
   );
 }

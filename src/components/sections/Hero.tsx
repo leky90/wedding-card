@@ -1,49 +1,45 @@
 import { Heart } from "lucide-react";
 
-import { BloomCluster, CornerFloral } from "@/components/ui/Ornaments";
 import { asset } from "@/lib/assets";
 import { weddingConfig } from "@/lib/wedding-config";
 
-/** Lấy chữ cái đầu của từ cuối trong tên ("Minh Quân" → "Q") */
+/** Lấy chữ cái đầu của từ cuối trong tên ("Như Quỳnh" → "Q") */
 const initialOf = (name: string) => name.trim().split(/\s+/).pop()?.[0] ?? "";
 
 export function Hero() {
   const { groom, bride } = weddingConfig.couple;
   const { wedding } = weddingConfig;
-  const monogram = `${initialOf(bride.name)}&${initialOf(groom.name)}`;
+
+  // "16 . 07 . 2026" → ["16", "07", "26"] cho khối số lớn
+  const digits = wedding.displayDate.match(/\d+/g) ?? [];
+  const dateRows = [digits[0] ?? "", digits[1] ?? "", (digits[2] ?? "").slice(-2)];
 
   return (
-    <section className="relative flex min-h-svh items-center justify-center overflow-hidden px-4 py-20">
-      {/* nền loang hồng nhẹ + monogram chìm */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_8%_0%,#fdeef1_0%,transparent_55%),radial-gradient(50rem_36rem_at_100%_100%,#fbe3e8_0%,transparent_50%)]"
-      />
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 select-none font-script text-[11rem] leading-none text-primary/[0.05] md:text-[24rem]"
-      >
-        {monogram}
-      </span>
-
-      <CornerFloral className="absolute left-3 top-3 h-28 w-28 text-gold/50 md:left-8 md:top-8 md:h-44 md:w-44" />
-      <CornerFloral className="absolute right-3 top-3 h-28 w-28 -scale-x-100 text-gold/50 md:right-8 md:top-8 md:h-44 md:w-44" />
-      <CornerFloral className="absolute bottom-3 left-3 hidden h-28 w-28 -scale-y-100 text-gold/40 md:bottom-8 md:left-8 md:block md:h-44 md:w-44" />
-      <CornerFloral className="absolute bottom-3 right-3 hidden h-28 w-28 -scale-100 text-gold/40 md:bottom-8 md:right-8 md:block md:h-44 md:w-44" />
-
-      <div className="flex flex-col items-center text-center">
-        <p className="rise text-[11px] font-semibold uppercase tracking-[0.55em] text-primary md:text-sm" style={{ animationDelay: "200ms" }}>
-          Save · The · Date
+    <section className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 py-20">
+      <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
+        {/* Monogram chữ lồng Q & K — chữ serif đậm tương phản cao như thiệp giấy */}
+        <p
+          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-7xl"
+          style={{ animationDelay: "120ms" }}
+        >
+          {initialOf(bride.name)}
+          <span className="px-1.5 font-normal text-primary/45">&amp;</span>
+          {initialOf(groom.name)}
         </p>
 
-        {/* ảnh vòm + cụm hoa trên đỉnh */}
-        <div className="rise relative mt-10" style={{ animationDelay: "380ms" }}>
-          <BloomCluster className="absolute -top-7 left-1/2 z-10 h-10 w-32 -translate-x-1/2 text-primary md:-top-8 md:h-12 md:w-40" />
-          <div className="absolute -inset-3 rounded-b-[2rem] rounded-t-full border border-primary/30 md:-inset-4" />
-          <div className="relative aspect-[3/4] w-52 overflow-hidden rounded-b-[1.6rem] rounded-t-full shadow-card md:w-64">
+        <p
+          className="rise mt-6 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs"
+          style={{ animationDelay: "260ms" }}
+        >
+          Save the date
+        </p>
+
+        {/* ảnh vòm */}
+        <div className="rise mt-8" style={{ animationDelay: "400ms" }}>
+          <div className="relative aspect-[3/4] w-48 overflow-hidden rounded-b-[1.6rem] rounded-t-full shadow-card ring-1 ring-rose-soft/70 md:w-60">
             <img
               src={asset(wedding.heroImage)}
-              alt={`${groom.name} và ${bride.name}`}
+              alt={`${bride.name} và ${groom.name}`}
               fetchPriority="high"
               className="absolute inset-0 h-full w-full object-cover"
               style={{ objectPosition: wedding.heroImagePosition }}
@@ -51,25 +47,31 @@ export function Hero() {
           </div>
         </div>
 
+        {/* tên cô dâu & chú rể — chữ viết tay, cô dâu trước như thiệp */}
         <h1
-          className="rise mt-10 flex flex-col items-center gap-1 font-script text-[2.75rem] leading-tight text-primary-deep md:flex-row md:gap-6 md:text-7xl"
-          style={{ animationDelay: "560ms" }}
+          className="rise mt-8 flex flex-col items-center gap-1 font-script text-[2.75rem] leading-tight text-primary-deep md:text-6xl"
+          style={{ animationDelay: "540ms" }}
         >
           <span>{bride.name}</span>
-          <Heart aria-hidden className="animate-heart h-7 w-7 fill-primary text-primary md:h-9 md:w-9" />
+          <Heart aria-hidden className="animate-heart my-1 h-6 w-6 fill-primary text-primary md:h-7 md:w-7" />
           <span>{groom.name}</span>
         </h1>
 
-        <div className="rise mt-7" style={{ animationDelay: "720ms" }}>
-          <div className="flex items-center justify-center gap-4 font-display text-lg tracking-[0.3em] text-ink md:text-2xl">
-            <span aria-hidden className="h-px w-10 bg-primary/40 md:w-16" />
-            <span>{wedding.displayDate}</span>
-            <span aria-hidden className="h-px w-10 bg-primary/40 md:w-16" />
-          </div>
-          <p className="mt-3 text-xs italic text-muted md:text-sm">
-            {wedding.dayLabel}, {wedding.lunarDate}
-          </p>
+        {/* số ngày cưới cỡ lớn, màu rose-gold (chữ ký thị giác của thiệp) */}
+        <div
+          className="rise mt-9 flex flex-col items-center font-display font-bold leading-none tabular-nums text-rosegold"
+          style={{ animationDelay: "700ms" }}
+        >
+          {dateRows.map((row, i) => (
+            <span key={i} className="contents">
+              {i > 0 && <span aria-hidden className="my-2 block h-px w-12 bg-rosegold/45 md:w-16" />}
+              <span className="text-[4.25rem] md:text-[8.5rem]">{row}</span>
+            </span>
+          ))}
         </div>
+        <p className="rise mt-5 text-[11px] uppercase tracking-[0.28em] text-muted md:text-xs" style={{ animationDelay: "820ms" }}>
+          {wedding.dayLabel} · {wedding.lunarDate}
+        </p>
       </div>
     </section>
   );

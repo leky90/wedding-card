@@ -1,32 +1,33 @@
-import { Heart } from "lucide-react";
-
-import { CornerFloral } from "@/components/ui/Ornaments";
+import { WeddingRings } from "@/components/ui/Ornaments";
+import { Reveal } from "@/components/ui/Reveal";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export function Footer() {
   const { groom, bride } = weddingConfig.couple;
+  const { invitation, wedding } = weddingConfig;
 
   return (
-    <footer className="relative overflow-hidden bg-[linear-gradient(180deg,#7c1b22_0%,#56101a_58%,#3a0c13_100%)] px-4 py-20 text-center text-white md:py-28">
-      <CornerFloral className="absolute -left-8 -top-8 h-44 w-44 text-gold/20" />
-      <CornerFloral className="absolute -bottom-8 -right-8 h-44 w-44 -scale-100 text-gold/20" />
+    <footer className="relative overflow-hidden bg-[linear-gradient(180deg,#7c1b22_0%,#56101a_60%,#3a0c13_100%)] px-5 py-24 text-center text-white md:py-32">
+      <Reveal className="mx-auto max-w-prose">
+        <WeddingRings className="mx-auto h-16 w-20 text-rose-soft md:h-20 md:w-24" />
 
-      <p className="font-script text-6xl text-rose-soft md:text-8xl">Thank you!</p>
-      <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-white/80">
-        {weddingConfig.invitation.thankYou}
-      </p>
+        <h2 className="mt-7 font-display text-3xl font-bold uppercase tracking-[0.16em] text-rose-soft md:text-5xl">
+          Lời Cảm Ơn
+        </h2>
 
-      <p className="mt-10 flex items-center justify-center gap-3 font-display text-lg tracking-[0.25em] md:text-xl">
-        <span>{bride.name.toUpperCase()}</span>
-        <Heart className="animate-heart h-5 w-5 fill-rose-soft text-rose-soft" aria-hidden />
-        <span>{groom.name.toUpperCase()}</span>
-      </p>
-      <p className="mt-3 text-xs tracking-[0.5em] text-white/60">{weddingConfig.wedding.displayDate}</p>
+        <div className="mx-auto mt-8 space-y-5 text-sm leading-relaxed text-white/85 md:text-[15px]">
+          <p>{invitation.thankYou1}</p>
+          <p>{invitation.thankYou2}</p>
+        </div>
 
-      <span aria-hidden className="mx-auto mt-10 block h-px w-40 bg-white/15" />
-      <p className="mt-6 text-[11px] text-white/45">
-        Thiệp cưới online · Được tạo với <Heart className="inline h-3 w-3 fill-current" aria-hidden /> dành tặng
-        khách quý
+        <p className="mt-9 text-[10px] uppercase tracking-[0.32em] text-white/55">Trân trọng</p>
+        <p className="mt-2 font-script text-4xl text-rose-soft md:text-5xl">
+          {bride.name} và {groom.name}
+        </p>
+      </Reveal>
+
+      <p className="relative mt-12 text-[11px] uppercase tracking-[0.3em] text-white/45">
+        {bride.name} &amp; {groom.name} · {wedding.displayDate}
       </p>
     </footer>
   );

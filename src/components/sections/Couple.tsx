@@ -30,11 +30,13 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
         </div>
       </div>
       <p className="mt-8 font-script text-4xl text-primary-deep md:text-5xl">{person.name}</p>
-      <p className="mt-1 font-display text-sm tracking-wide text-ink/70">
+      <p className="mt-2 font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary-deep/85 md:text-sm">
         {person.fullName}
-        {person.lineage ? ` (${person.lineage})` : ""}
       </p>
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-rose-mid">{role}</p>
+      <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.34em] text-rose-mid">
+        {role}
+        {person.lineage ? ` · ${person.lineage}` : ""}
+      </p>
       {(person.parents.father || person.parents.mother) && (
         <p className="mt-4 text-sm leading-relaxed text-muted">
           {parentLabel}
@@ -58,6 +60,7 @@ export function Couple() {
           eyebrow="Hạnh phúc trăm năm"
           title="Chú Rể & Cô Dâu"
           description={weddingConfig.invitation.message}
+          divider
         />
       </Reveal>
       <div className="mx-auto grid max-w-4xl gap-14 md:grid-cols-[1fr_auto_1fr] md:gap-8">
@@ -65,7 +68,7 @@ export function Couple() {
           <PersonCard person={groom} role="Chú rể" parentLabel="Con trai của" frameTilt="-rotate-2" />
         </Reveal>
         <Reveal delay={160} className="hidden md:flex md:flex-col md:items-center md:justify-center md:gap-4">
-          <span className="font-script text-6xl text-rose-mid">&amp;</span>
+          <span className="font-display text-5xl italic text-rose-mid">&amp;</span>
           <span aria-hidden className="h-24 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
           <Heart className="animate-heart h-6 w-6 fill-primary text-primary" aria-hidden />
         </Reveal>

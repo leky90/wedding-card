@@ -44,7 +44,7 @@ export function Story() {
                       />
                     </div>
                     <div className="p-5 md:p-6">
-                      <p className="font-script text-3xl text-rose-mid">{milestone.year}</p>
+                      <p className="font-display text-2xl font-bold tracking-wide text-rose-mid">{milestone.year}</p>
                       <h3 className="mt-1 font-display text-lg font-semibold text-primary-deep">{milestone.title}</h3>
                       <p className="mt-2 text-sm leading-relaxed text-muted">{milestone.description}</p>
                     </div>

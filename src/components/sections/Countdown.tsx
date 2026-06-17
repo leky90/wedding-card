@@ -26,24 +26,21 @@ export function Countdown() {
   ];
 
   return (
-    <section className="bg-gradient-to-b from-cream to-blush px-4 py-16 md:py-24">
+    <section className="bg-cream px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading eyebrow="Cùng đếm ngược" title="Ngày Chung Đôi" />
-        <div className="mx-auto grid max-w-xl grid-cols-4 gap-2.5 md:gap-5">
+        <div className="mx-auto grid max-w-md grid-cols-4 divide-x divide-rose-soft/50">
           {cells.map((cell) => (
-            <div
-              key={cell.label}
-              className="rounded-2xl border border-rose-soft/60 bg-white py-4 text-center shadow-card md:py-7"
-            >
-              <p className="font-display text-2xl font-semibold tabular-nums text-primary-deep md:text-5xl">
+            <div key={cell.label} className="px-1 text-center">
+              <p className="font-display text-4xl font-bold tabular-nums text-primary-deep md:text-6xl">
                 {cell.value}
               </p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-muted md:text-xs">{cell.label}</p>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.25em] text-muted md:text-xs">{cell.label}</p>
             </div>
           ))}
         </div>
         {timeLeft.isOver && (
-          <p className="mt-8 text-center font-script text-3xl text-primary">
+          <p className="mt-8 text-center font-display text-2xl font-semibold text-primary md:text-3xl">
             Chúng mình đã chính thức về chung một nhà
           </p>
         )}

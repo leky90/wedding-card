@@ -1,12 +1,14 @@
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { CornerFloral } from "@/components/ui/Ornaments";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
 /** Sự kiện phát ra khi khách mở thiệp — nơi khác (nhạc nền) lắng nghe. */
 export const INVITATION_OPEN_EVENT = "invitation:open";
+
+/** Lấy chữ cái đầu của từ cuối trong tên ("Như Quỳnh" → "Q") */
+const initialOf = (name: string) => name.trim().split(/\s+/).pop()?.[0] ?? "";
 
 /** Màn hình bìa "Mở thiệp" — khoá cuộn cho tới khi khách chạm mở. */
 export function Cover() {
@@ -42,33 +44,37 @@ export function Cover() {
         opened && "pointer-events-none -translate-y-full opacity-0",
       )}
     >
-      {/* khung viền kép + hoa 4 góc */}
+      {/* khung viền kép mảnh — tối giản như thiệp giấy */}
       <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-gold/35 md:inset-6" />
       <div className="pointer-events-none absolute inset-5 rounded-[20px] border border-primary/10 md:inset-8" />
-      <CornerFloral className="pointer-events-none absolute left-5 top-5 h-20 w-20 text-gold/60 md:left-9 md:top-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute right-5 top-5 h-20 w-20 -scale-x-100 text-gold/60 md:right-9 md:top-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute bottom-5 left-5 h-20 w-20 -scale-y-100 text-gold/60 md:bottom-9 md:left-9 md:h-36 md:w-36" />
-      <CornerFloral className="pointer-events-none absolute bottom-5 right-5 h-20 w-20 -scale-100 text-gold/60 md:bottom-9 md:right-9 md:h-36 md:w-36" />
 
       <div className="relative text-center">
-        <p className="rise text-[11px] font-semibold uppercase tracking-[0.5em] text-primary md:text-xs" style={{ animationDelay: "150ms" }}>
+        <p
+          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-6xl"
+          style={{ animationDelay: "120ms" }}
+        >
+          {initialOf(bride.name)}
+          <span className="px-1.5 font-normal text-primary/45">&amp;</span>
+          {initialOf(groom.name)}
+        </p>
+        <p className="rise mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs" style={{ animationDelay: "260ms" }}>
           Thiệp mời cưới
         </p>
 
         <div
           className="rise mt-6 flex flex-col items-center justify-center gap-1 font-script text-5xl leading-snug text-primary-deep md:flex-row md:gap-5 md:text-7xl"
-          style={{ animationDelay: "320ms" }}
+          style={{ animationDelay: "400ms" }}
         >
           <span>{bride.name}</span>
           <Heart className="animate-heart h-6 w-6 fill-primary text-primary md:h-8 md:w-8" aria-hidden />
           <span>{groom.name}</span>
         </div>
 
-        <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-ink md:text-base" style={{ animationDelay: "480ms" }}>
+        <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-ink md:text-base" style={{ animationDelay: "540ms" }}>
           {wedding.dayLabel.toUpperCase()} · {wedding.displayDate}
         </p>
 
-        <div className="rise mt-10" style={{ animationDelay: "660ms" }}>
+        <div className="rise mt-10" style={{ animationDelay: "700ms" }}>
           <button
             type="button"
             onClick={open}
@@ -77,7 +83,7 @@ export function Cover() {
           >
             <span aria-hidden className="absolute inset-0 rounded-full border border-primary/60" style={{ animation: "ring-pulse 2.4s ease-out infinite" }} />
             <span aria-hidden className="absolute inset-0 rounded-full border border-primary/40" style={{ animation: "ring-pulse 2.4s ease-out 1.2s infinite" }} />
-            <span className="font-script text-2xl md:text-3xl">Mở thiệp</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">Mở thiệp</span>
           </button>
           <p className="mt-5 text-xs text-muted">Chạm để mở thiệp mời</p>
         </div>
