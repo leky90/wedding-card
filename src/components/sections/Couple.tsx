@@ -19,7 +19,7 @@ function PersonCard({ person, role, parentLabel, frameTilt }: PersonCardProps) {
     <div className="flex flex-col items-center text-center">
       <div className="relative">
         <div className={cn("absolute -inset-3 rounded-b-3xl rounded-t-full border border-primary/25", frameTilt)} />
-        <div className="relative aspect-[3/4] w-52 overflow-hidden rounded-b-2xl rounded-t-full shadow-card md:w-60">
+        <div className="relative aspect-[3/4] w-52 overflow-hidden rounded-b-2xl rounded-t-full shadow-card ring-1 ring-gold/25 md:w-60">
           <img
             src={asset(person.image)}
             alt={person.fullName}

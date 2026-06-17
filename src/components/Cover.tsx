@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -44,25 +45,27 @@ export function Cover() {
         opened && "pointer-events-none -translate-y-full opacity-0",
       )}
     >
+      <PhotoBackdrop image="/images/hero-couple.jpg" scrim="cover" position="50% 22%" eager />
+
       {/* khung viền kép mảnh — tối giản như thiệp giấy */}
-      <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-gold/35 md:inset-6" />
-      <div className="pointer-events-none absolute inset-5 rounded-[20px] border border-primary/10 md:inset-8" />
+      <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-rose-soft/45 md:inset-6" />
+      <div className="pointer-events-none absolute inset-5 rounded-[20px] border border-rose-soft/25 md:inset-8" />
 
       <div className="relative text-center">
         <p
-          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-6xl"
+          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-white md:text-6xl"
           style={{ animationDelay: "120ms" }}
         >
           {initialOf(bride.name)}
-          <span className="px-1.5 font-normal text-primary/45">&amp;</span>
+          <span className="px-1.5 font-normal text-white/55">&amp;</span>
           {initialOf(groom.name)}
         </p>
-        <p className="rise mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs" style={{ animationDelay: "260ms" }}>
+        <p className="rise mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-soft md:text-xs" style={{ animationDelay: "260ms" }}>
           Thiệp mời cưới
         </p>
 
         <div
-          className="rise mt-6 flex flex-col items-center justify-center gap-1 font-script text-5xl leading-snug text-primary-deep md:flex-row md:gap-5 md:text-7xl"
+          className="rise mt-6 flex flex-col items-center justify-center gap-1 font-script text-5xl leading-snug text-white md:flex-row md:gap-5 md:text-7xl"
           style={{ animationDelay: "400ms" }}
         >
           <span>{bride.name}</span>
@@ -70,7 +73,7 @@ export function Cover() {
           <span>{groom.name}</span>
         </div>
 
-        <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-ink md:text-base" style={{ animationDelay: "540ms" }}>
+        <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-rose-soft md:text-base" style={{ animationDelay: "540ms" }}>
           {wedding.dayLabel.toUpperCase()} · {wedding.displayDate}
         </p>
 
@@ -79,13 +82,13 @@ export function Cover() {
             type="button"
             onClick={open}
             aria-label="Mở thiệp mời"
-            className="group relative inline-flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-card transition duration-300 hover:scale-105 hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:h-28 md:w-28"
+            className="group relative inline-flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-card transition duration-300 hover:scale-105 hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-soft md:h-28 md:w-28"
           >
             <span aria-hidden className="absolute inset-0 rounded-full border border-primary/60" style={{ animation: "ring-pulse 2.4s ease-out infinite" }} />
             <span aria-hidden className="absolute inset-0 rounded-full border border-primary/40" style={{ animation: "ring-pulse 2.4s ease-out 1.2s infinite" }} />
             <span className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">Mở thiệp</span>
           </button>
-          <p className="mt-5 text-xs text-muted">Chạm để mở thiệp mời</p>
+          <p className="mt-5 text-xs text-white/80">Chạm để mở thiệp mời</p>
         </div>
       </div>
     </div>

@@ -42,6 +42,22 @@ thay được sau mà không đụng vào code giao diện.
 
 Phần tử nổi: nút nhạc nền, nút lên đầu trang, lớp cánh hoa rơi.
 
+## Phong cách photo-centric (nền ảnh soft-focus)
+
+Trang dùng ảnh làm trung tâm: nhiều section có **nền ảnh mờ (soft-focus)** tạo không
+khí, chữ đặt đè lên qua component dùng chung [`PhotoBackdrop`](../src/components/ui/PhotoBackdrop.tsx).
+
+- **Nhẹ máy**: nền lấy từ ảnh LQIP ~140px trong `public/images/blur/<tên>.jpg` (vài KB),
+  phóng to + `filter: blur()` → mềm tự nhiên; ảnh sắc nét (Hero arch, Couple, Story,
+  Gallery) KHÔNG bao giờ đi qua PhotoBackdrop. Chỉ Cover + Hero `eager`, còn lại lazy.
+- **Tương phản WCAG AA**: mỗi nền có 1 lớp scrim (`cover` ảnh tối cho chữ sáng •
+  `haze` lớp kem gần trắng cho chữ đậm • `footer` wine gần đặc). Scrim làm tối bằng lớp
+  ink trung tính trước, wine chỉ là tint nhận diện (≤0.16).
+- **Nhịp xen kẽ**: Cover/Hero/Footer (ảnh tối) ↔ Countdown/Story/Events/Guestbook
+  (kem soft-focus) ↔ Couple/Gallery/RSVP (sạch, để ảnh sắc nét và form dễ đọc).
+- Tĩnh hoàn toàn (không parallax) nên tự an toàn với `prefers-reduced-motion`;
+  `position: relative + overflow-hidden` mỗi section chặn tràn ngang.
+
 ## Dữ liệu từ xa (Supabase)
 
 - Env: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (xem `.env.example`).

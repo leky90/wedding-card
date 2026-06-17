@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 
+import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { asset } from "@/lib/assets";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -16,19 +17,21 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 py-20">
+      <PhotoBackdrop image={wedding.heroImage} scrim="cover" position="50% 18%" eager />
+
       <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
         {/* Monogram chữ lồng Q & K — chữ serif đậm tương phản cao như thiệp giấy */}
         <p
-          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-7xl"
+          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-white md:text-7xl"
           style={{ animationDelay: "120ms" }}
         >
           {initialOf(bride.name)}
-          <span className="px-1.5 font-normal text-primary/45">&amp;</span>
+          <span className="px-1.5 font-normal text-white/55">&amp;</span>
           {initialOf(groom.name)}
         </p>
 
         <p
-          className="rise mt-6 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs"
+          className="rise mt-6 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-soft md:text-xs"
           style={{ animationDelay: "260ms" }}
         >
           Save the date
@@ -36,7 +39,7 @@ export function Hero() {
 
         {/* ảnh vòm */}
         <div className="rise mt-8" style={{ animationDelay: "400ms" }}>
-          <div className="relative aspect-[3/4] w-48 overflow-hidden rounded-b-[1.6rem] rounded-t-full shadow-card ring-1 ring-rose-soft/70 md:w-60">
+          <div className="relative aspect-[3/4] w-48 overflow-hidden rounded-b-[1.6rem] rounded-t-full shadow-card ring-2 ring-rose-soft/80 md:w-60">
             <img
               src={asset(wedding.heroImage)}
               alt={`${bride.name} và ${groom.name}`}
@@ -49,7 +52,7 @@ export function Hero() {
 
         {/* tên cô dâu & chú rể — chữ viết tay, cô dâu trước như thiệp */}
         <h1
-          className="rise mt-8 flex flex-col items-center gap-1 font-script text-[2.75rem] leading-tight text-primary-deep md:text-6xl"
+          className="rise mt-8 flex flex-col items-center gap-1 font-script text-[2.75rem] leading-tight text-white md:text-6xl"
           style={{ animationDelay: "540ms" }}
         >
           <span>{bride.name}</span>
@@ -60,7 +63,7 @@ export function Hero() {
         {/* số ngày cưới cỡ lớn, màu rose-gold (chữ ký thị giác của thiệp) */}
         <div
           className="rise mt-9 flex flex-col items-center font-display font-bold leading-none tabular-nums text-rosegold"
-          style={{ animationDelay: "700ms" }}
+          style={{ animationDelay: "700ms", textShadow: "0 1px 12px rgba(58,12,19,.55)" }}
         >
           {dateRows.map((row, i) => (
             <span key={i} className="contents">
@@ -69,7 +72,7 @@ export function Hero() {
             </span>
           ))}
         </div>
-        <p className="rise mt-5 text-[11px] uppercase tracking-[0.28em] text-muted md:text-xs" style={{ animationDelay: "820ms" }}>
+        <p className="rise mt-5 text-[11px] uppercase tracking-[0.28em] text-rose-soft/85 md:text-xs" style={{ animationDelay: "820ms" }}>
           {wedding.dayLabel} · {wedding.lunarDate}
         </p>
       </div>

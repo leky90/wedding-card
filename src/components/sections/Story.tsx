@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 
+import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { asset } from "@/lib/assets";
@@ -9,6 +10,7 @@ import { weddingConfig } from "@/lib/wedding-config";
 export function Story() {
   return (
     <section className="relative overflow-hidden bg-blush px-4 py-16 md:py-24">
+      <PhotoBackdrop image="/images/story-1.jpg" scrim="haze" position="50% 30%" />
       <Reveal>
         <SectionHeading eyebrow="Chuyện chúng mình" title="Câu Chuyện Tình Yêu" />
       </Reveal>
@@ -23,7 +25,7 @@ export function Story() {
               <li key={milestone.year} className="relative">
                 <span
                   aria-hidden
-                  className="absolute left-4 top-3 z-10 -translate-x-1/2 rounded-full bg-blush p-1 md:left-1/2"
+                  className="absolute left-4 top-3 z-10 -translate-x-1/2 rounded-full bg-cream p-1 md:left-1/2"
                 >
                   <Heart className="h-4 w-4 fill-primary text-primary" />
                 </span>
