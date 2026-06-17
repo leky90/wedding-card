@@ -11,9 +11,6 @@ importers:
       '@fontsource/be-vietnam-pro':
         specifier: ^5.2.5
         version: 5.2.8
-      '@fontsource/great-vibes':
-        specifier: ^5.2.5
-        version: 5.2.8
       '@fontsource/playfair-display':
         specifier: ^5.2.5
         version: 5.2.8
@@ -192,9 +189,6 @@ packages:
 
   '@fontsource/be-vietnam-pro@5.2.8':
     resolution: {integrity: sha512-lqTtfpkAy0GdFH0fqwR0sW4VP+3CNGaQV6SpW2TSZaNmixZMlou+2dp5ErGidrS1MPiDDPfPbfW2i358PVFLZA==}
-
-  '@fontsource/great-vibes@5.2.8':
-    resolution: {integrity: sha512-/PATz436NGixjNaigierUpv50wfNv2UhAAijcCPkn4ynvl41x66TCLbXVSVfp4pth9gjWnGqgoj0lVIhHapAuw==}
 
   '@fontsource/playfair-display@5.2.8':
     resolution: {integrity: sha512-fUEhib70SszNhQVsGbUMSsWJhr7Je0rdeuZdtGpDNu0GKF1xJM8QhpI/y0pckU25GcChXm9TLOmeZupkvvZo2g==}
@@ -1360,8 +1354,6 @@ snapshots:
       levn: 0.4.1
 
   '@fontsource/be-vietnam-pro@5.2.8': {}
-
-  '@fontsource/great-vibes@5.2.8': {}
 
   '@fontsource/playfair-display@5.2.8': {}
 

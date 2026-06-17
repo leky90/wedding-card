@@ -1,7 +1,7 @@
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
+import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -45,7 +45,22 @@ export function Cover() {
         opened && "pointer-events-none -translate-y-full opacity-0",
       )}
     >
-      <PhotoBackdrop image="/images/hero-couple.jpg" scrim="cover" position="50% 22%" eager />
+      {/* ảnh cưới sắc nét toàn màn + lớp phủ gradient (không làm mờ) để chữ trắng đọc rõ */}
+      <img
+        src={asset(wedding.heroImage)}
+        alt={`${bride.name} và ${groom.name}`}
+        fetchPriority="high"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+        style={{ objectPosition: "50% 22%" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(40,12,16,.55) 0%, rgba(40,12,16,.42) 45%, rgba(40,12,16,.66) 100%)",
+        }}
+      />
 
       {/* khung viền kép mảnh — tối giản như thiệp giấy */}
       <div className="pointer-events-none absolute inset-3 rounded-[26px] border border-rose-soft/45 md:inset-6" />
@@ -65,7 +80,7 @@ export function Cover() {
         </p>
 
         <div
-          className="rise mt-6 flex flex-col items-center justify-center gap-1 font-script text-5xl leading-snug text-white md:flex-row md:gap-5 md:text-7xl"
+          className="rise mt-6 flex flex-col items-center justify-center gap-1 font-display text-4xl font-medium italic leading-snug text-white md:flex-row md:gap-5 md:text-6xl"
           style={{ animationDelay: "400ms" }}
         >
           <span>{bride.name}</span>

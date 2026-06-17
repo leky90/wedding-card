@@ -1,5 +1,4 @@
 import { WeddingRings } from "@/components/ui/Ornaments";
-import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -9,8 +8,6 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden bg-primary-deep px-5 py-24 text-center text-white md:py-32">
-      <PhotoBackdrop image="/images/hero-couple.jpg" scrim="footer" position="50% 40%" />
-
       <Reveal className="mx-auto max-w-prose">
         <WeddingRings className="mx-auto h-16 w-20 text-rose-soft md:h-20 md:w-24" />
 
@@ -24,7 +21,7 @@ export function Footer() {
         </div>
 
         <p className="mt-9 text-[10px] uppercase tracking-[0.32em] text-white/65">Trân trọng</p>
-        <p className="mt-2 font-script text-4xl text-rose-soft md:text-5xl">
+        <p className="mt-2 font-display text-3xl font-medium italic text-rose-soft md:text-4xl">
           {bride.name} và {groom.name}
         </p>
       </Reveal>

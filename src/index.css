@@ -20,10 +20,11 @@
 
   --shadow-card: 0 18px 45px -18px rgb(124 27 34 / 0.18);
 
-  /* Font tự host qua Fontsource (import trong main.tsx) */
+  /* Font tự host qua Fontsource (import trong main.tsx).
+     Bám thiệp giấy: serif tương phản cao (Playfair) cho tên/ngày/tiêu đề
+     (tên dùng italic 500), sans (Be Vietnam Pro) cho nội dung. Không dùng script. */
   --font-body: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Playfair Display", Georgia, serif;
-  --font-script: "Great Vibes", "Brush Script MT", cursive;
 }
 
 html {

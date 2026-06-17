@@ -1,7 +1,6 @@
 import { CalendarPlus, Camera, Flower2, MapPin, UtensilsCrossed, Users, Wine } from "lucide-react";
 
 import { CornerFloral, RingsIcon } from "@/components/ui/Ornaments";
-import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildGoogleCalendarUrl } from "@/lib/countdown";
@@ -26,8 +25,7 @@ export function Events() {
   const { groom, bride } = weddingConfig.couple;
 
   return (
-    <section className="relative overflow-hidden bg-cream px-4 py-16 md:py-24">
-      <PhotoBackdrop image="/images/gallery-7.jpg" scrim="haze" position="50% 30%" frame />
+    <section className="bg-gradient-to-b from-white to-cream px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading
           eyebrow="Trân trọng kính mời"

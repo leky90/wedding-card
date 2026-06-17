@@ -52,7 +52,7 @@ export function Gallery() {
             type="button"
             onClick={() => setIndex(i)}
             aria-label={`Xem ${photo.alt}`}
-            className="group relative mb-3 block w-full cursor-pointer overflow-hidden rounded-xl border border-rose-soft/40 focus-visible:outline-2 focus-visible:outline-primary md:mb-4"
+            className="group relative mb-3 block w-full cursor-pointer overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-primary md:mb-4"
           >
             <img
               src={asset(photo.src)}
@@ -74,7 +74,7 @@ export function Gallery() {
           role="dialog"
           aria-modal="true"
           aria-label="Xem ảnh cưới"
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-[#30060f]/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-[#30060f]/95 p-4"
           onClick={close}
         >
           <figure className="flex max-h-full flex-col items-center" onClick={(e) => e.stopPropagation()}>

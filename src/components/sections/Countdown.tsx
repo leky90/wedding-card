@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getTimeLeft } from "@/lib/countdown";
@@ -27,8 +26,7 @@ export function Countdown() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-cream px-4 py-16 md:py-24">
-      <PhotoBackdrop image="/images/story-2.jpg" scrim="haze" position="50% 35%" frame />
+    <section className="bg-cream px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading eyebrow="Cùng đếm ngược" title="Ngày Chung Đôi" />
         <div className="mx-auto grid max-w-md grid-cols-4 divide-x divide-rose-soft/50">

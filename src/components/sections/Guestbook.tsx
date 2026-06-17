@@ -1,7 +1,6 @@
 import { NotebookPen, Quote } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 
-import { PhotoBackdrop } from "@/components/ui/PhotoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { fetchWishes, getRemoteConfig, insertWish } from "@/lib/api";
@@ -62,8 +61,7 @@ export function Guestbook() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-blush px-4 py-16 md:py-24">
-      <PhotoBackdrop image="/images/gallery-6.jpg" scrim="haze" position="50% 30%" />
+    <section className="bg-blush px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading
           eyebrow="Lưu giữ kỷ niệm"

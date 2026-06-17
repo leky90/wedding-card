@@ -84,7 +84,7 @@ export function Rsvp() {
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blush">
                 <Heart className="animate-heart h-8 w-8 fill-primary text-primary" aria-hidden />
               </span>
-              <p className="mt-5 font-script text-4xl text-primary-deep">Cảm ơn {name.trim()}!</p>
+              <p className="mt-5 font-display text-3xl font-medium italic text-primary-deep md:text-4xl">Cảm ơn {name.trim()}!</p>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 {attend === "yes"
                   ? "Chúng mình rất mong được gặp bạn trong ngày vui. Hẹn gặp bạn nhé!"

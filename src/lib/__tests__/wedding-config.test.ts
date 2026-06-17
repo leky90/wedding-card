@@ -9,8 +9,7 @@ import { weddingConfig } from "@/lib/wedding-config";
 
 /** Gom mọi chuỗi khách sẽ NHÌN THẤY trên thiệp */
 function visibleStrings(): string[] {
-  const { couple, wedding, invitation, events, story, gallery, wishes, dayTimeline } =
-    weddingConfig;
+  const { couple, wedding, invitation, events, gallery, wishes, dayTimeline } = weddingConfig;
   const personStrings = [couple.groom, couple.bride].flatMap((p) => [
     p.name,
     p.fullName,
@@ -30,7 +29,6 @@ function visibleStrings(): string[] {
     invitation.thankYou1,
     invitation.thankYou2,
     ...events.flatMap((e) => [e.name, e.dateLabel, e.lunarLabel ?? "", e.venue, e.address]),
-    ...story.flatMap((s) => [s.year, s.title, s.description]),
     ...gallery.map((g) => g.alt),
     ...wishes.flatMap((w) => [w.name, w.message]),
     ...dayTimeline.map((t) => t.label),
@@ -65,7 +63,6 @@ describe("wedding-config: nội dung hiển thị", () => {
       weddingConfig.wedding.heroImage,
       weddingConfig.couple.groom.image,
       weddingConfig.couple.bride.image,
-      ...weddingConfig.story.map((s) => s.image),
       ...weddingConfig.gallery.map((g) => g.src),
     ];
     for (const path of imagePaths) {
@@ -82,7 +79,6 @@ describe("wedding-config: nội dung hiển thị", () => {
       weddingConfig.wedding.heroImagePosition,
       weddingConfig.couple.groom.imagePosition,
       weddingConfig.couple.bride.imagePosition,
-      ...weddingConfig.story.map((s) => s.imagePosition),
     ].filter((p): p is string => Boolean(p));
     for (const pos of positions) {
       expect(pos).toMatch(/^\d{1,3}% \d{1,3}%$/);

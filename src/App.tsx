@@ -8,7 +8,6 @@ import { Gallery } from "@/components/sections/Gallery";
 import { Guestbook } from "@/components/sections/Guestbook";
 import { Hero } from "@/components/sections/Hero";
 import { Rsvp } from "@/components/sections/Rsvp";
-import { Story } from "@/components/sections/Story";
 import { Petals } from "@/components/ui/Petals";
 
 export default function App() {
@@ -20,7 +19,6 @@ export default function App() {
         <Hero />
         <Countdown />
         <Couple />
-        <Story />
         <Gallery />
         <Events />
         <Rsvp />

@@ -50,15 +50,6 @@ export interface TimelineStep {
   icon: "welcome" | "rings" | "party" | "photo";
 }
 
-export interface StoryMilestone {
-  year: string;
-  title: string;
-  description: string;
-  image: string;
-  /** Vị trí crop ảnh (CSS object-position) */
-  imagePosition?: string;
-}
-
 export interface GalleryPhoto {
   src: string;
   alt: string;
@@ -94,7 +85,6 @@ export interface WeddingConfig {
   events: WeddingEvent[];
   /** Trình tự ngày cưới hiển thị trong mục Sự Kiện */
   dayTimeline: TimelineStep[];
-  story: StoryMilestone[];
   gallery: GalleryPhoto[];
   rsvp: { deadline: string };
   /** Lời chúc mẫu hiển thị sẵn trong sổ lưu bút */
@@ -198,41 +188,6 @@ export const weddingConfig: WeddingConfig = {
     { time: "11:00", label: "Lễ Cưới", icon: "rings" },
     { time: "11:30", label: "Tiệc Cưới", icon: "party" },
     { time: "13:00", label: "Chụp Hình", icon: "photo" },
-  ],
-
-  story: [
-    {
-      year: "2016",
-      title: "Lần đầu gặp gỡ",
-      description:
-        "Mười năm trước, Kỳ và Quỳnh gặp nhau khi cả hai còn rất trẻ. Cái gật đầu chào ngày ấy, ai ngờ lại là khởi đầu của cả một đời.",
-      image: "/images/story-1.jpg",
-      imagePosition: "50% 30%",
-    },
-    {
-      year: "2019",
-      title: "Về chung một đội",
-      description:
-        "Qua những ngày bỡ ngỡ, qua cả những lần giận hờn rồi lại tha thứ, hai đứa chọn nắm tay nhau đi tiếp, cùng vun đắp và trưởng thành.",
-      image: "/images/story-2.jpg",
-      imagePosition: "52% 35%",
-    },
-    {
-      year: "2025",
-      title: "Lời cầu hôn",
-      description:
-        "Một chiếc nhẫn nhỏ và một câu hỏi lớn: \"Làm vợ anh nhé?\". Quỳnh gật đầu trước khi nước mắt kịp rơi.",
-      image: "/images/story-3.jpg",
-      imagePosition: "50% 40%",
-    },
-    {
-      year: "2026",
-      title: "Về chung một nhà",
-      description:
-        "Và hôm nay, sau mười năm yêu thương, chúng mình chính thức gọi nhau là gia đình. Cảm ơn bạn đã là một phần của hành trình này.",
-      image: "/images/story-4.jpg",
-      imagePosition: "50% 55%",
-    },
   ],
 
   gallery: [
