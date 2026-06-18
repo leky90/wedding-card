@@ -1,9 +1,11 @@
 import { CalendarPlus, Camera, Flower2, MapPin, UtensilsCrossed, Users, Wine } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import { CornerFloral, RingsIcon } from "@/components/ui/Ornaments";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildGoogleCalendarUrl } from "@/lib/countdown";
+import { gsap } from "@/lib/gsap";
 import { weddingConfig, type TimelineStep, type WeddingEvent } from "@/lib/wedding-config";
 
 function EventIcon({ icon }: { icon: WeddingEvent["icon"] }) {
@@ -23,9 +25,61 @@ function TimelineIcon({ icon }: { icon: TimelineStep["icon"] }) {
 
 export function Events() {
   const { groom, bride } = weddingConfig.couple;
+  const rootRef = useRef<HTMLElement>(null);
+
+  // Thẻ sự kiện "rải" vào, đường timeline vẽ ngang + chấm mốc nẩy lên
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const q = self.selector!;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
+        gsap.from(q("[data-event-card]"), {
+          y: 40,
+          rotateZ: 1.5,
+          autoAlpha: 0,
+          stagger: 0.12,
+          duration: 0.8,
+          ease: "power3.out",
+          clearProps: "transform", // trả lại transform cho hover card-lift
+          scrollTrigger: { trigger: q("[data-event-grid]")[0], start: "top 78%", once: true },
+        });
+        gsap.fromTo(
+          q("[data-timeline-rule]"),
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            transformOrigin: "left center",
+            ease: "power2.out",
+            duration: 0.9,
+            scrollTrigger: { trigger: q("[data-timeline-rule]")[0], start: "top 85%", once: true },
+          },
+        );
+        gsap.from(q("[data-timeline-dot]"), {
+          scale: 0.6,
+          autoAlpha: 0,
+          ease: "back.out(1.6)",
+          stagger: 0.1,
+          duration: 0.5,
+          scrollTrigger: { trigger: q("[data-timeline-rule]")[0], start: "top 80%", once: true },
+        });
+      });
+      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767.98px)", () => {
+        gsap.from(q("[data-event-card]"), {
+          y: 24,
+          autoAlpha: 0,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: q("[data-event-grid]")[0], start: "top 85%", once: true },
+        });
+      });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="bg-gradient-to-b from-white to-cream px-4 py-16 md:py-24">
+    <section ref={rootRef} className="bg-gradient-to-b from-white to-cream px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading
           eyebrow="Trân trọng kính mời"
@@ -34,10 +88,13 @@ export function Events() {
         />
       </Reveal>
 
-      <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3 md:gap-6">
-        {weddingConfig.events.map((event, i) => (
-          <Reveal key={event.id} delay={i * 90} className="h-full">
-            <article className="card-lift relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-rose-soft/60 bg-white p-6 text-center shadow-card md:p-7">
+      <div data-event-grid className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3 md:gap-6">
+        {weddingConfig.events.map((event) => (
+          <article
+            key={event.id}
+            data-event-card
+            className="card-lift relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-rose-soft/60 bg-white p-6 text-center shadow-card md:p-7"
+          >
               {/* hoạ tiết gold chỉ trên thẻ Tiệc Thân Mật — như tấm 15.07 của thiệp giấy */}
               {event.id === "tiec-than-mat" && (
                 <CornerFloral
@@ -82,8 +139,7 @@ export function Events() {
                   <CalendarPlus className="h-3.5 w-3.5" aria-hidden /> Thêm vào lịch
                 </a>
               </div>
-            </article>
-          </Reveal>
+          </article>
         ))}
       </div>
 
@@ -93,10 +149,17 @@ export function Events() {
           Trình tự ngày cưới
         </p>
         <ol className="relative grid grid-cols-2 gap-y-9 sm:grid-cols-4">
-          <span aria-hidden className="absolute inset-x-8 top-7 hidden h-px bg-rose-soft sm:block" />
+          <span
+            aria-hidden
+            data-timeline-rule
+            className="absolute inset-x-8 top-7 hidden h-px bg-rose-soft sm:block"
+          />
           {weddingConfig.dayTimeline.map((step) => (
             <li key={step.label} className="relative flex flex-col items-center text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full border border-rose-soft bg-white text-primary shadow-sm">
+              <span
+                data-timeline-dot
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-rose-soft bg-white text-primary shadow-sm"
+              >
                 <TimelineIcon icon={step.icon} />
               </span>
               <p className="mt-3 font-display text-lg font-semibold tabular-nums text-primary">{step.time}</p>

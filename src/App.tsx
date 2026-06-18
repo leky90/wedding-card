@@ -9,8 +9,10 @@ import { Guestbook } from "@/components/sections/Guestbook";
 import { Hero } from "@/components/sections/Hero";
 import { Rsvp } from "@/components/sections/Rsvp";
 import { Petals } from "@/components/ui/Petals";
+import { useScrollRefresh } from "@/lib/gsap";
 
 export default function App() {
+  useScrollRefresh();
   return (
     <>
       <Cover />

@@ -13,6 +13,7 @@
   "dependencies": {
     "@fontsource/be-vietnam-pro": "^5.2.5",
     "@fontsource/playfair-display": "^5.2.5",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"

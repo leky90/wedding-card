@@ -1,6 +1,8 @@
 import { Heart } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import { asset } from "@/lib/assets";
+import { gsap } from "@/lib/gsap";
 import { weddingConfig } from "@/lib/wedding-config";
 
 /** Lấy chữ cái đầu của từ cuối trong tên ("Như Quỳnh" → "Q") */
@@ -9,13 +11,38 @@ const initialOf = (name: string) => name.trim().split(/\s+/).pop()?.[0] ?? "";
 export function Hero() {
   const { groom, bride } = weddingConfig.couple;
   const { wedding } = weddingConfig;
+  const rootRef = useRef<HTMLElement>(null);
 
   // "16 . 07 . 2026" → ["16", "07", "2026"] cho khối số lớn
   const digits = wedding.displayDate.match(/\d+/g) ?? [];
   const dateRows = [digits[0] ?? "", digits[1] ?? "", digits[2] ?? ""];
 
+  // Parallax nhẹ cho ảnh hero khi cuộn (chỉ ảnh bên trong khung overflow-hidden)
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const img = self.selector!("[data-hero-photo]");
+        gsap.set(img, { scale: 1.16 }); // dư biên để parallax không lộ mép
+        gsap.fromTo(
+          img,
+          { yPercent: -6 },
+          {
+            yPercent: 6,
+            ease: "none",
+            scrollTrigger: { trigger: rootRef.current, start: "top top", end: "bottom top", scrub: 0.6 },
+          },
+        );
+      });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-cream py-12 md:py-20">
+    <section
+      ref={rootRef}
+      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-cream py-12 md:py-20"
+    >
       {/* Ảnh cưới lớn, rõ ràng — full-bleed trên mobile, bo góc trên desktop */}
       <div className="rise w-full md:mx-auto md:max-w-2xl md:px-5" style={{ animationDelay: "120ms" }}>
         <div className="relative aspect-[3/4] w-full overflow-hidden md:aspect-[4/5] md:rounded-2xl md:shadow-card">
@@ -23,6 +50,7 @@ export function Hero() {
             src={asset(wedding.heroImage)}
             alt={`${bride.name} và ${groom.name}`}
             fetchPriority="high"
+            data-hero-photo
             className="absolute inset-0 h-full w-full object-cover"
             style={{ objectPosition: wedding.heroImagePosition }}
           />

@@ -1,15 +1,17 @@
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { asset } from "@/lib/assets";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export function Gallery() {
   const photos = weddingConfig.gallery;
   const [index, setIndex] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setIndex(null), []);
   const step = useCallback(
@@ -32,8 +34,36 @@ export function Gallery() {
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
+      // đóng lightbox khôi phục chiều cao cuộn → tính lại trigger
+      ScrollTrigger.refresh();
     };
   }, [index, close, step]);
+
+  // Ảnh trong album hiện lên kiểu "vén" từ dưới, so le theo thứ tự
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const tiles = self.selector!("[data-gallery-tile]");
+        gsap.set(tiles, { y: 28, autoAlpha: 0, clipPath: "inset(100% 0 0 0)" });
+        ScrollTrigger.batch(tiles, {
+          start: "top 88%",
+          once: true,
+          onEnter: (els) =>
+            gsap.to(els, {
+              y: 0,
+              autoAlpha: 1,
+              clipPath: "inset(0% 0 0 0)",
+              duration: 0.8,
+              ease: "power3.out",
+              stagger: 0.08,
+              overwrite: true,
+            }),
+        });
+      });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section className="bg-white px-4 py-16 md:py-24">
@@ -45,14 +75,14 @@ export function Gallery() {
         />
       </Reveal>
 
-      <Reveal variant="stagger" className="mx-auto max-w-5xl columns-2 gap-3 md:columns-3 md:gap-4">
+      <div ref={rootRef} className="mx-auto max-w-5xl columns-2 gap-3 md:columns-3 md:gap-4">
         {photos.map((photo, i) => (
           <button
             key={photo.src}
             type="button"
             onClick={() => setIndex(i)}
             aria-label={`Xem ${photo.alt}`}
-            style={{ "--i": i } as CSSProperties}
+            data-gallery-tile
             className="group relative mb-3 block w-full cursor-pointer overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-primary md:mb-4"
           >
             <img
@@ -68,7 +98,7 @@ export function Gallery() {
             </span>
           </button>
         ))}
-      </Reveal>
+      </div>
 
       {index !== null && (
         <div
