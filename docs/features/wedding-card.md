@@ -88,6 +88,18 @@ Ngoài hệ CSS ở trên, một số mốc cuộn "ấn tượng" dùng **GSAP 
   trên ảnh/thẻ có hover để GSAP không "khoá" transform của `.tile-img`/`.card-lift`.
 - Không đụng tới Cover open/scroll-lock, lightbox, form RSVP/Guestbook, đếm ngược, nhạc.
 
+## Ảnh hiện lên từ bụi (hiệu ứng "Thanos")
+
+- Component dùng chung [`ThanosImage`](../src/components/ui/ThanosImage.tsx): khi ảnh cuộn
+  tới, ảnh **kết tụ từ các hạt bụi rose-gold** bay vào rồi lắng thành ảnh sắc nét
+  (giống cảnh tan biến của Thanos nhưng đảo chiều). Hiện áp dụng cho **Album Hình Cưới**.
+- Thuần canvas, lấy màu từ ảnh thu nhỏ (same-origin → không taint), giới hạn ~3-4k hạt,
+  chạy 1 lần khi vào view (IntersectionObserver) rồi gỡ canvas. Hình học hạt ở
+  [`src/lib/thanos.ts`](../src/lib/thanos.ts) là thuần (seed) nên test được.
+- **An toàn**: tôn trọng `prefers-reduced-motion` (no-op, hiện ảnh thẳng); tiến trình
+  theo đồng hồ thực + **failsafe** (khi vào view 2.7s, và mount 5s) → ảnh KHÔNG bao giờ
+  kẹt ẩn dù `requestAnimationFrame` bị tab nền tạm dừng. Không làm vỡ lightbox.
+
 ## SEO & chia sẻ mạng xã hội
 
 - Thẻ meta tĩnh trong `index.html` (crawler MXH không chạy JS nên phải tĩnh):

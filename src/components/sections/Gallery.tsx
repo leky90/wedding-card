@@ -3,15 +3,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ThanosImage } from "@/components/ui/ThanosImage";
 import { asset } from "@/lib/assets";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { ScrollTrigger } from "@/lib/gsap";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export function Gallery() {
   const photos = weddingConfig.gallery;
   const [index, setIndex] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setIndex(null), []);
   const step = useCallback(
@@ -39,32 +39,6 @@ export function Gallery() {
     };
   }, [index, close, step]);
 
-  // Ảnh trong album hiện lên kiểu "vén" từ dưới, so le theo thứ tự
-  useEffect(() => {
-    const ctx = gsap.context((self) => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tiles = self.selector!("[data-gallery-tile]");
-        gsap.set(tiles, { y: 28, autoAlpha: 0, clipPath: "inset(100% 0 0 0)" });
-        ScrollTrigger.batch(tiles, {
-          start: "top 88%",
-          once: true,
-          onEnter: (els) =>
-            gsap.to(els, {
-              y: 0,
-              autoAlpha: 1,
-              clipPath: "inset(0% 0 0 0)",
-              duration: 0.8,
-              ease: "power3.out",
-              stagger: 0.08,
-              overwrite: true,
-            }),
-        });
-      });
-    }, rootRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section className="bg-white px-4 py-16 md:py-24">
       <Reveal>
@@ -75,23 +49,22 @@ export function Gallery() {
         />
       </Reveal>
 
-      <div ref={rootRef} className="mx-auto max-w-5xl columns-2 gap-3 md:columns-3 md:gap-4">
+      <div className="mx-auto max-w-5xl columns-2 gap-3 md:columns-3 md:gap-4">
         {photos.map((photo, i) => (
           <button
             key={photo.src}
             type="button"
             onClick={() => setIndex(i)}
             aria-label={`Xem ${photo.alt}`}
-            data-gallery-tile
             className="group relative mb-3 block w-full cursor-pointer overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-primary md:mb-4"
           >
-            <img
-              src={asset(photo.src)}
+            <ThanosImage
+              src={photo.src}
               alt={photo.alt}
               width={photo.width}
               height={photo.height}
               loading="lazy"
-              className="tile-img h-auto w-full"
+              className="tile-img"
             />
             <span className="absolute inset-0 flex items-center justify-center bg-primary-dark/0 opacity-0 transition duration-300 group-hover:bg-primary-dark/25 group-hover:opacity-100">
               <ZoomIn className="h-7 w-7 text-white drop-shadow" aria-hidden />
