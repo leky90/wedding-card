@@ -1,8 +1,9 @@
 import { Heart } from "lucide-react";
 import { useEffect, useRef } from "react";
 
+import { INVITATION_OPEN_EVENT } from "@/components/Cover";
 import { asset } from "@/lib/assets";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger, EASE, DUR, STAG, SCRUB } from "@/lib/gsap";
 import { weddingConfig } from "@/lib/wedding-config";
 
 /** Lấy chữ cái đầu của từ cuối trong tên ("Như Quỳnh" → "Q") */
@@ -17,22 +18,58 @@ export function Hero() {
   const digits = wedding.displayDate.match(/\d+/g) ?? [];
   const dateRows = [digits[0] ?? "", digits[1] ?? "", digits[2] ?? ""];
 
-  // Parallax nhẹ cho ảnh hero khi cuộn (chỉ ảnh bên trong khung overflow-hidden)
+  // Parallax ảnh hero (scrub) + entrance theo timeline chạy SAU khi rèm bìa nâng lên
+  // (sự kiện INVITATION_OPEN_EVENT), kèm fallback ScrollTrigger cho trường hợp refresh/deep-link.
   useEffect(() => {
     const ctx = gsap.context((self) => {
+      const q = self.selector!;
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const img = self.selector!("[data-hero-photo]");
+        // ---- parallax ảnh (giữ nguyên; chỉ ảnh trong khung overflow-hidden) ----
+        const img = q("[data-hero-photo]");
         gsap.set(img, { scale: 1.16 }); // dư biên để parallax không lộ mép
         gsap.fromTo(
           img,
           { yPercent: -6 },
           {
             yPercent: 6,
-            ease: "none",
-            scrollTrigger: { trigger: rootRef.current, start: "top top", end: "bottom top", scrub: 0.6 },
+            ease: EASE.drift,
+            scrollTrigger: { trigger: rootRef.current, start: "top top", end: "bottom top", scrub: SCRUB.photo },
           },
         );
+
+        // ---- entrance: ẩn cho tới khi play(); chạy khi mở bìa HOẶC fallback scroll ----
+        const targets = q(
+          '[data-hero="photo-frame"], [data-hero="mono"], [data-hero="eyebrow"], [data-hero="names"], [data-hero="num"], [data-hero="rule"], [data-hero="lunar"]',
+        );
+        gsap.set(targets, { autoAlpha: 0 }); // chống nháy trước khi play
+
+        let played = false;
+        const play = () => {
+          if (played) return;
+          played = true;
+          // fromTo với to-state HIỆN RÕ (autoAlpha:1): vì đã gsap.set autoAlpha:0 ở trên,
+          // dùng .from({autoAlpha:0}) sẽ lấy giá trị hiện tại (0) làm đích → animate 0->0 (kẹt ẩn).
+          const tl = gsap.timeline();
+          tl.fromTo(q('[data-hero="photo-frame"]'), { autoAlpha: 0, scale: 1.04 }, { autoAlpha: 1, scale: 1, duration: DUR.veil, ease: EASE.veil }, 0)
+            .fromTo(q('[data-hero="mono"]'), { y: 26, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: DUR.head, ease: EASE.veil }, 0.25)
+            .fromTo(q('[data-hero="eyebrow"]'), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: DUR.line, ease: EASE.silk }, 0.42)
+            .fromTo(q('[data-hero="names"]'), { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: DUR.head, ease: EASE.veil }, 0.5)
+            .fromTo(q('[data-hero="num"]'), { y: 14, autoAlpha: 0, scale: 0.96 }, { y: 0, autoAlpha: 1, scale: 1, stagger: STAG.tile, duration: DUR.line, ease: EASE.veil }, 0.62)
+            .fromTo(q('[data-hero="rule"]'), { scaleX: 0, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, transformOrigin: "center", stagger: STAG.tile, duration: 0.5, ease: EASE.veil }, 0.7)
+            .fromTo(q('[data-hero="lunar"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: EASE.silk }, 0.95);
+        };
+
+        // chính: bìa phát INVITATION_OPEN_EVENT khi bấm "Mở thiệp"
+        window.addEventListener(INVITATION_OPEN_EVENT, play, { once: true });
+        // dự phòng: refresh-sau-mở / deep-link tới hero mà không có sự kiện bìa
+        const st = ScrollTrigger.create({ trigger: rootRef.current, start: "top 85%", once: true, onEnter: play });
+
+        // matchMedia gọi hàm này khi revert/teardown → gỡ listener + kill trigger dự phòng
+        return () => {
+          window.removeEventListener(INVITATION_OPEN_EVENT, play);
+          st.kill();
+        };
       });
     }, rootRef);
     return () => ctx.revert();
@@ -44,7 +81,7 @@ export function Hero() {
       className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-cream py-12 md:py-20"
     >
       {/* Ảnh cưới lớn, rõ ràng — full-bleed trên mobile, bo góc trên desktop */}
-      <div className="rise w-full md:mx-auto md:max-w-2xl md:px-5" style={{ animationDelay: "120ms" }}>
+      <div data-hero="photo-frame" className="w-full md:mx-auto md:max-w-2xl md:px-5">
         <div className="relative aspect-[3/4] w-full overflow-hidden md:aspect-[4/5] md:rounded-2xl md:shadow-card">
           <img
             src={asset(wedding.heroImage)}
@@ -60,8 +97,8 @@ export function Hero() {
       {/* Chữ trên nền kem — serif tương phản cao như thiệp giấy */}
       <div className="mt-10 flex w-full max-w-md flex-col items-center px-5 text-center md:mt-14">
         <p
-          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-7xl"
-          style={{ animationDelay: "260ms" }}
+          data-hero="mono"
+          className="font-display text-5xl font-bold leading-none tracking-[0.06em] text-primary-deep md:text-7xl"
         >
           {initialOf(bride.name)}
           <span className="px-1.5 font-normal text-primary/45">&amp;</span>
@@ -69,15 +106,15 @@ export function Hero() {
         </p>
 
         <p
-          className="rise mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs"
-          style={{ animationDelay: "380ms" }}
+          data-hero="eyebrow"
+          className="mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-mid md:text-xs"
         >
           Save the date
         </p>
 
         <h1
-          className="rise mt-6 flex flex-col items-center gap-1 font-display text-4xl font-medium italic leading-tight text-primary-deep md:text-6xl"
-          style={{ animationDelay: "500ms" }}
+          data-hero="names"
+          className="mt-6 flex flex-col items-center gap-1 font-display text-4xl font-medium italic leading-tight text-primary-deep md:text-6xl"
         >
           <span>{bride.name}</span>
           <Heart aria-hidden className="animate-heart my-1 h-6 w-6 fill-primary text-primary md:h-7 md:w-7" />
@@ -88,26 +125,16 @@ export function Hero() {
           {dateRows.map((row, i) => (
             <span key={i} className="contents">
               {i > 0 && (
-                <span
-                  aria-hidden
-                  className="rule-draw my-2 block h-px w-12 bg-rosegold/45 md:w-16"
-                  style={{ animationDelay: `${720 + (i - 1) * 120}ms` }}
-                />
+                <span aria-hidden data-hero="rule" className="my-2 block h-px w-12 bg-rosegold/45 md:w-16" />
               )}
-              <span
-                className="rise-num text-[3.75rem] md:text-[7rem]"
-                style={{ animationDelay: `${640 + i * 120}ms` }}
-              >
+              <span data-hero="num" className="text-[3.75rem] md:text-[7rem]">
                 {row}
               </span>
             </span>
           ))}
         </div>
 
-        <p
-          className="rise mt-5 text-[11px] uppercase tracking-[0.28em] text-rose-mid md:text-xs"
-          style={{ animationDelay: "760ms" }}
-        >
+        <p data-hero="lunar" className="mt-5 text-[11px] uppercase tracking-[0.28em] text-rose-mid md:text-xs">
           {wedding.dayLabel} · {wedding.lunarDate}
         </p>
       </div>

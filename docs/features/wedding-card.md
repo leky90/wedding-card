@@ -77,13 +77,27 @@ Ngoài hệ CSS ở trên, một số mốc cuộn "ấn tượng" dùng **GSAP 
 - Đăng ký DUY NHẤT ở `src/lib/gsap.ts` + hook `useScrollRefresh()` (gọi 1 lần trong App)
   để `ScrollTrigger.refresh()` SAU khi màn bìa mở khoá cuộn (~1100ms) và khi font/ảnh đổi
   layout, và khi đóng lightbox.
+- **Bảng token dùng chung** (`src/lib/gsap.ts`): `EASE` (veil/silk/press/drift), `DUR`,
+  `STAG`, `SCRUB`, `DRIFT` + helper `sectionTl(trigger, start)` → mọi section cùng một
+  "physics", không rải literal. Đổi cảm giác toàn site = sửa 1 chỗ.
 - Mỗi section dùng chung khuôn: `useEffect` + `gsap.context(rootRef)` +
   `gsap.matchMedia("(prefers-reduced-motion: no-preference)")`, cleanup `ctx.revert()`.
-  **Mọi from-state nằm trong matchMedia** → bật "giảm chuyển động" là KHÔNG có trigger nào,
-  nội dung hiện đầy đủ (no-op thật sự). Chỉ animate transform/opacity/clipPath.
-- 5 mốc: Hero parallax ảnh (scrub), Gallery vén ảnh `ScrollTrigger.batch` clip, Couple
-  vén chân dung + ảnh lắng + chữ hiện so le, Events thẻ "rải vào" (desktop nghiêng nhẹ,
-  mobile phẳng) + timeline vẽ ngang + chấm nẩy, Footer lộ từng dòng theo mặt nạ + lắng nhẹ.
+  **Mọi from-state/`gsap.set` nằm trong matchMedia** → bật "giảm chuyển động" là KHÔNG có
+  trigger nào, nội dung hiện đầy đủ (no-op thật sự). Chỉ animate transform/opacity/clipPath.
+- **Entrance timeline cho TẤT CẢ section (trên→dưới)**: Cover (timeline mount, 6 dòng chữ so
+  le), Hero (timeline chạy khi mở bìa qua `INVITATION_OPEN_EVENT`, kèm fallback ScrollTrigger
+  `top 85%`; ảnh parallax scrub giữ nguyên), Countdown (4 ô "đáp xuống" so le — KHÔNG bao giờ
+  chạm số đang đếm), Couple (vén chân dung + chữ so le), Gallery (heading qua `Reveal`, tile
+  giữ ThanosImage), Events (thẻ "rải vào" + timeline vẽ ngang + chấm nẩy), RSVP/Guestbook
+  (thẻ/cột trồi theo KHỐI, once, `clearProps:'transform'` — KHÔNG từ-state lên input/li),
+  Footer (lộ từng dòng theo mặt nạ + lắng nhẹ).
+  → Lưu ý GSAP: khi đã `gsap.set(autoAlpha:0)` để chống nháy thì phải dùng `.fromTo(...{autoAlpha:1})`
+  cho entrance (dùng `.from({autoAlpha:0})` sẽ lấy giá trị hiện tại 0 làm đích → kẹt ẩn).
+- **Parallax (chỉ y/yPercent, không x → không tràn ngang)**: Hero ảnh (scrub, mọi bề rộng),
+  Footer "lắng" (scrub, mọi bề rộng); md+ thêm: 2 chân dung Couple trôi ngược chiều ±18px,
+  hoạ tiết gold Events trôi nhẹ trong thẻ overflow-hidden. Scrub ≤ 0.9, KHÔNG pin.
+- **Heading luôn giữ `<Reveal>`** (divider vẽ `.hd-line`/`.hd-heart` theo class `.revealed`);
+  GSAP chỉ chạm phần THÂN section, không fade heading.
 - KHÔNG scroll-jacking, KHÔNG pin (giữ mượt + không tràn ngang ở 375px). `clearProps`
   trên ảnh/thẻ có hover để GSAP không "khoá" transform của `.tile-img`/`.card-lift`.
 - Không đụng tới Cover open/scroll-lock, lightbox, form RSVP/Guestbook, đếm ngược, nhạc.

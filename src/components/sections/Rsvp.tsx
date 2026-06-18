@@ -1,9 +1,10 @@
 import { Heart, Send } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getRemoteConfig, insertRsvp, type RsvpPayload } from "@/lib/api";
+import { gsap, EASE, DUR, sectionTl } from "@/lib/gsap";
 import { saveLocalRsvp } from "@/lib/local-store";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
@@ -16,6 +17,7 @@ const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wider 
 const REMOTE = getRemoteConfig();
 
 export function Rsvp() {
+  const rootRef = useRef<HTMLElement>(null);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [name, setName] = useState("");
@@ -67,8 +69,26 @@ export function Rsvp() {
     setMessage("");
   };
 
+  // Entrance: cả thẻ form trồi lên MỘT khối (once). KHÔNG bao giờ from-state lên input/select/
+  // textarea/radio/button (cướp focus / nhảy caret). clearProps:'transform' → thẻ kết về none
+  // cho focus-scroll & ring lấy nét đúng. Không parallax (drift thẻ khi đang gõ là không chấp nhận).
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const q = self.selector!;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        sectionTl(rootRef.current, "top 80%").from(
+          q('[data-rsvp="card"]'),
+          { y: 32, autoAlpha: 0, scale: 0.98, duration: DUR.veil, ease: EASE.veil, clearProps: "transform" },
+          0,
+        );
+      });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="rsvp" className="bg-white px-4 py-16 md:py-24">
+    <section ref={rootRef} id="rsvp" className="bg-white px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading
           eyebrow="Bạn sẽ đến chứ?"
@@ -77,7 +97,7 @@ export function Rsvp() {
         />
       </Reveal>
 
-      <Reveal className="mx-auto max-w-xl">
+      <div data-rsvp="card" className="mx-auto max-w-xl">
         <div className="rounded-3xl border border-rose-soft/60 bg-gradient-to-b from-white to-blush/70 p-6 shadow-card md:p-9">
           {sent ? (
             <div className="py-6 text-center">
@@ -200,7 +220,7 @@ export function Rsvp() {
             </form>
           )}
         </div>
-      </Reveal>
+      </div>
     </section>
   );
 }

@@ -1,9 +1,10 @@
 import { NotebookPen, Quote } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { fetchWishes, getRemoteConfig, insertWish } from "@/lib/api";
+import { gsap, EASE, DUR, sectionTl } from "@/lib/gsap";
 import { addLocalWish, loadLocalWishes } from "@/lib/local-store";
 import { cn } from "@/lib/utils";
 import { weddingConfig, type Wish } from "@/lib/wedding-config";
@@ -23,6 +24,7 @@ export function Guestbook() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const rootRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!REMOTE) return;
@@ -33,6 +35,27 @@ export function Guestbook() {
     return () => {
       alive = false;
     };
+  }, []);
+
+  // Entrance: 2 cột (form + list) hiện theo KHỐI, once. KHÔNG bao giờ stagger từng <li>
+  // (list prepend khi gửi → giật). Desktop hội tụ theo x trong cột lưới hữu hạn; mobile dùng
+  // y:24 tránh tràn ngang ở 375px. clearProps:'transform' → list kết về none (giữ inner-scroll).
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const q = self.selector!;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
+        const tl = sectionTl(rootRef.current, "top 80%");
+        tl.from(q('[data-gb="form"]'), { x: -20, autoAlpha: 0, duration: DUR.veil, ease: EASE.veil, clearProps: "transform" }, 0)
+          .from(q('[data-gb="list"]'), { x: 20, autoAlpha: 0, duration: DUR.veil, ease: EASE.veil, clearProps: "transform" }, 0.12);
+      });
+      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767.98px)", () => {
+        const tl = sectionTl(rootRef.current, "top 80%");
+        tl.from(q('[data-gb="form"]'), { y: 24, autoAlpha: 0, duration: DUR.line, ease: EASE.veil, clearProps: "transform" }, 0)
+          .from(q('[data-gb="list"]'), { y: 24, autoAlpha: 0, duration: DUR.line, ease: EASE.veil, clearProps: "transform" }, 0.1);
+      });
+    }, rootRef);
+    return () => ctx.revert();
   }, []);
 
   const submit = async (e: FormEvent) => {
@@ -61,7 +84,7 @@ export function Guestbook() {
   };
 
   return (
-    <section className="bg-blush px-4 py-16 md:py-24">
+    <section ref={rootRef} className="bg-blush px-4 py-16 md:py-24">
       <Reveal>
         <SectionHeading
           eyebrow="Lưu giữ kỷ niệm"
@@ -71,7 +94,7 @@ export function Guestbook() {
       </Reveal>
 
       <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-[2fr_3fr]">
-        <Reveal>
+        <div data-gb="form">
           <form
             onSubmit={submit}
             noValidate
@@ -115,9 +138,9 @@ export function Guestbook() {
               <NotebookPen className="h-4 w-4" aria-hidden /> {sending ? "Đang gửi..." : "Gửi lời chúc"}
             </button>
           </form>
-        </Reveal>
+        </div>
 
-        <Reveal delay={120}>
+        <div data-gb="list">
           <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-rose-mid md:text-left">
             {wishes.length} lời chúc
           </p>
@@ -130,7 +153,7 @@ export function Guestbook() {
               </li>
             ))}
           </ul>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

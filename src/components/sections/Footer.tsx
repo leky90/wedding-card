@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { WeddingRings } from "@/components/ui/Ornaments";
-import { gsap } from "@/lib/gsap";
+import { gsap, EASE, DUR, STAG, SCRUB } from "@/lib/gsap";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export function Footer() {
@@ -18,18 +18,18 @@ export function Footer() {
         const tl = gsap.timeline({
           scrollTrigger: { trigger: rootRef.current, start: "top 75%", once: true },
         });
-        tl.from(q("[data-footer-rings]"), { scale: 0.7, autoAlpha: 0, duration: 0.7, ease: "back.out(1.4)" }, 0)
-          .from(q("[data-footer-title]"), { y: 24, autoAlpha: 0, duration: 0.7, ease: "power3.out" }, 0.2)
-          .from(q("[data-footer-line]"), { yPercent: 110, autoAlpha: 0, stagger: 0.12, duration: 0.8, ease: "power3.out" }, 0.35)
-          .from(q("[data-footer-sign]"), { y: 18, autoAlpha: 0, stagger: 0.1, duration: 0.8, ease: "power2.out" }, 0.95);
+        tl.from(q("[data-footer-rings]"), { scale: 0.7, autoAlpha: 0, duration: DUR.head, ease: EASE.press }, 0)
+          .from(q("[data-footer-title]"), { y: 24, autoAlpha: 0, duration: DUR.head, ease: EASE.veil }, 0.2)
+          .from(q("[data-footer-line]"), { yPercent: 110, autoAlpha: 0, stagger: STAG.line, duration: 0.8, ease: EASE.silk }, 0.35)
+          .from(q("[data-footer-sign]"), { y: 18, autoAlpha: 0, stagger: STAG.line, duration: 0.8, ease: EASE.silk }, 0.95);
         // trôi nhẹ "lắng xuống" cho cả khối khi tiến tới cuối trang
         gsap.fromTo(
           q("[data-footer-content]"),
           { y: 24 },
           {
             y: -8,
-            ease: "none",
-            scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom bottom", scrub: 0.9 },
+            ease: EASE.drift,
+            scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom bottom", scrub: SCRUB.settle },
           },
         );
       });

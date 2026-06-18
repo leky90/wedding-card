@@ -1,7 +1,8 @@
 import { Heart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { asset } from "@/lib/assets";
+import { gsap, EASE, DUR } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { weddingConfig } from "@/lib/wedding-config";
 
@@ -15,6 +16,7 @@ const initialOf = (name: string) => name.trim().split(/\s+/).pop()?.[0] ?? "";
 export function Cover() {
   const [opened, setOpened] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (opened) return;
@@ -23,6 +25,25 @@ export function Cover() {
       document.body.style.overflow = "";
     };
   }, [opened]);
+
+  // Entrance màn bìa: chạy NGAY khi mount (không ScrollTrigger — bìa cố định, đang khoá cuộn).
+  // GSAP làm chủ opacity+transform của 6 node chữ; reduced-motion → callback không chạy, hiện đủ.
+  useEffect(() => {
+    const ctx = gsap.context((self) => {
+      const q = self.selector!;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const tl = gsap.timeline({ delay: 0.15 });
+        tl.from(q('[data-cv="mono"]'), { y: 30, autoAlpha: 0, scale: 0.985, duration: DUR.head, ease: EASE.veil }, 0)
+          .from(q('[data-cv="eyebrow"]'), { y: 18, autoAlpha: 0, duration: DUR.line, ease: EASE.silk }, 0.18)
+          .from(q('[data-cv="names"]'), { y: 24, autoAlpha: 0, duration: DUR.head, ease: EASE.veil }, 0.3)
+          .from(q('[data-cv="date"]'), { y: 16, autoAlpha: 0, duration: DUR.line, ease: EASE.silk }, 0.5)
+          .from(q('[data-cv="cta"]'), { y: 14, autoAlpha: 0, scale: 0.9, duration: DUR.pop, ease: EASE.press }, 0.62)
+          .from(q('[data-cv="hint"]'), { autoAlpha: 0, duration: 0.5, ease: EASE.silk }, 0.85);
+      });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
 
   if (hidden) return null;
 
@@ -39,6 +60,7 @@ export function Cover() {
 
   return (
     <div
+      ref={rootRef}
       id="invitation-cover"
       className={cn(
         "cover-shell fixed inset-0 z-[60] flex items-center justify-center overflow-hidden bg-cream px-6",
@@ -68,31 +90,31 @@ export function Cover() {
 
       <div className="relative text-center">
         <p
-          className="rise font-display text-5xl font-bold leading-none tracking-[0.06em] text-white md:text-6xl"
-          style={{ animationDelay: "200ms" }}
+          data-cv="mono"
+          className="font-display text-5xl font-bold leading-none tracking-[0.06em] text-white md:text-6xl"
         >
           {initialOf(bride.name)}
           <span className="px-1.5 font-normal text-white/55">&amp;</span>
           {initialOf(groom.name)}
         </p>
-        <p className="rise mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-soft md:text-xs" style={{ animationDelay: "360ms" }}>
+        <p data-cv="eyebrow" className="mt-5 text-[11px] font-semibold uppercase tracking-[0.5em] text-rose-soft md:text-xs">
           Thiệp mời cưới
         </p>
 
         <div
-          className="rise mt-6 flex flex-col items-center justify-center gap-1 font-display text-4xl font-medium italic leading-snug text-white md:flex-row md:gap-5 md:text-6xl"
-          style={{ animationDelay: "560ms" }}
+          data-cv="names"
+          className="mt-6 flex flex-col items-center justify-center gap-1 font-display text-4xl font-medium italic leading-snug text-white md:flex-row md:gap-5 md:text-6xl"
         >
           <span>{bride.name}</span>
           <Heart className="animate-heart h-6 w-6 fill-primary text-primary md:h-8 md:w-8" aria-hidden />
           <span>{groom.name}</span>
         </div>
 
-        <p className="rise mt-6 font-display text-sm tracking-[0.35em] text-rose-soft md:text-base" style={{ animationDelay: "760ms" }}>
+        <p data-cv="date" className="mt-6 font-display text-sm tracking-[0.35em] text-rose-soft md:text-base">
           {wedding.dayLabel.toUpperCase()} · {wedding.displayDate}
         </p>
 
-        <div className="rise mt-10" style={{ animationDelay: "1000ms" }}>
+        <div data-cv="cta" className="mt-10">
           <button
             type="button"
             onClick={open}
@@ -103,7 +125,7 @@ export function Cover() {
             <span aria-hidden className="cover-ring-2 absolute inset-0 rounded-full border border-primary/40" />
             <span className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">Mở thiệp</span>
           </button>
-          <p className="rise mt-5 text-xs text-white/80" style={{ animationDelay: "1150ms" }}>Chạm để mở thiệp mời</p>
+          <p data-cv="hint" className="mt-5 text-xs text-white/80">Chạm để mở thiệp mời</p>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { asset } from "@/lib/assets";
-import { gsap } from "@/lib/gsap";
+import { gsap, EASE, DUR, STAG, DRIFT, SCRUB } from "@/lib/gsap";
 import { weddingConfig, type Person } from "@/lib/wedding-config";
 
 interface PersonCardProps {
@@ -78,15 +78,31 @@ export function Couple() {
         self.selector!("[data-portrait]").forEach((wrap: Element) => {
           const img = wrap.querySelector("[data-portrait-img]");
           const lines = wrap.parentElement!.querySelectorAll("[data-portrait-line]");
-          const tl = gsap.timeline({ scrollTrigger: { trigger: wrap, start: "top 82%", once: true } });
+          const tl = gsap.timeline({ scrollTrigger: { trigger: wrap, start: "top 80%", once: true } });
           tl.fromTo(
             wrap,
             { clipPath: "inset(0 0 100% 0 round 16px)" },
-            { clipPath: "inset(0 0 0% 0 round 16px)", duration: 1.1, ease: "power3.out", clearProps: "clipPath" },
+            { clipPath: "inset(0 0 0% 0 round 16px)", duration: 1.1, ease: EASE.veil, clearProps: "clipPath" },
             0,
           )
-            .fromTo(img, { scale: 1.08 }, { scale: 1, duration: 1.2, ease: "power3.out", clearProps: "transform" }, 0)
-            .from(lines, { y: 16, autoAlpha: 0, stagger: 0.06, duration: 0.6, ease: "power3.out" }, 0.4);
+            .fromTo(img, { scale: 1.08 }, { scale: 1, duration: 1.2, ease: EASE.veil, clearProps: "transform" }, 0)
+            .from(lines, { y: 16, autoAlpha: 0, stagger: STAG.line, duration: DUR.line, ease: EASE.silk }, 0.4);
+        });
+      });
+      // Parallax đối lưu nhẹ giữa 2 chân dung (md+): drift trên WRAPPER (entrance dùng
+      // clipPath + clearProps:'clipPath' nên không để lại transform → scrub sở hữu sạch),
+      // hover scale vẫn nằm trên [data-portrait-img] con → 3 mối quan tâm, 3 node/thuộc tính.
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
+        self.selector!("[data-portrait]").forEach((w: Element, i: number) => {
+          gsap.fromTo(
+            w,
+            { y: i === 0 ? DRIFT.portrait : -DRIFT.portrait },
+            {
+              y: i === 0 ? -DRIFT.portrait : DRIFT.portrait,
+              ease: EASE.drift,
+              scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom top", scrub: SCRUB.soft },
+            },
+          );
         });
       });
     }, rootRef);

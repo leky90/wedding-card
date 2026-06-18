@@ -5,7 +5,7 @@ import { CornerFloral, RingsIcon } from "@/components/ui/Ornaments";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildGoogleCalendarUrl } from "@/lib/countdown";
-import { gsap } from "@/lib/gsap";
+import { gsap, EASE, DRIFT, SCRUB } from "@/lib/gsap";
 import { weddingConfig, type TimelineStep, type WeddingEvent } from "@/lib/wedding-config";
 
 function EventIcon({ icon }: { icon: WeddingEvent["icon"] }) {
@@ -39,7 +39,7 @@ export function Events() {
           autoAlpha: 0,
           stagger: 0.12,
           duration: 0.8,
-          ease: "power3.out",
+          ease: EASE.silk,
           clearProps: "transform", // trả lại transform cho hover card-lift
           scrollTrigger: { trigger: q("[data-event-grid]")[0], start: "top 78%", once: true },
         });
@@ -49,7 +49,7 @@ export function Events() {
           {
             scaleX: 1,
             transformOrigin: "left center",
-            ease: "power2.out",
+            ease: EASE.veil,
             duration: 0.9,
             scrollTrigger: { trigger: q("[data-timeline-rule]")[0], start: "top 85%", once: true },
           },
@@ -57,11 +57,21 @@ export function Events() {
         gsap.from(q("[data-timeline-dot]"), {
           scale: 0.6,
           autoAlpha: 0,
-          ease: "back.out(1.6)",
+          ease: EASE.press,
           stagger: 0.1,
           duration: 0.5,
           scrollTrigger: { trigger: q("[data-timeline-rule]")[0], start: "top 80%", once: true },
         });
+        // hoạ tiết gold trôi nhẹ trong thẻ (thẻ overflow-hidden → cắt gọn, không đổi layout)
+        gsap.fromTo(
+          q("[data-event-floral]"),
+          { y: -DRIFT.floral / 2 },
+          {
+            y: DRIFT.floral / 2,
+            ease: EASE.drift,
+            scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom top", scrub: SCRUB.soft },
+          },
+        );
       });
       mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767.98px)", () => {
         gsap.from(q("[data-event-card]"), {
@@ -69,7 +79,7 @@ export function Events() {
           autoAlpha: 0,
           stagger: 0.1,
           duration: 0.7,
-          ease: "power3.out",
+          ease: EASE.silk,
           clearProps: "transform",
           scrollTrigger: { trigger: q("[data-event-grid]")[0], start: "top 85%", once: true },
         });
@@ -97,10 +107,10 @@ export function Events() {
           >
               {/* hoạ tiết gold chỉ trên thẻ Tiệc Thân Mật — như tấm 15.07 của thiệp giấy */}
               {event.id === "tiec-than-mat" && (
-                <CornerFloral
-                  aria-hidden
-                  className="pointer-events-none absolute -right-4 -top-4 h-20 w-20 -scale-x-100 text-gold/35"
-                />
+                // wrapper nhận drift (GSAP ghi transform), CornerFloral con giữ -scale-x-100 (gương)
+                <span data-event-floral aria-hidden className="pointer-events-none absolute -right-4 -top-4 block">
+                  <CornerFloral className="h-20 w-20 -scale-x-100 text-gold/35" />
+                </span>
               )}
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blush text-primary ring-1 ring-rose-soft/70">
                 <EventIcon icon={event.icon} />
