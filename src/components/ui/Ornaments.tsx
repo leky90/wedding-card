@@ -47,11 +47,12 @@ export function CornerFloral(props: SVGProps<SVGSVGElement>) {
 export function HeartDivider(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 220 26" fill="none" aria-hidden="true" {...props}>
-      <path d="M6 13 H82" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M138 13 H214" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path className="hd-line" d="M6 13 H82" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path className="hd-line" d="M138 13 H214" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
       <circle cx="92" cy="13" r="2" fill="currentColor" />
       <circle cx="128" cy="13" r="2" fill="currentColor" />
       <path
+        className="hd-heart"
         d="M110 20.5 c-7.5-6.2-12-9.8-12-14.3 a6 6 0 0 1 11-3.3 a6 6 0 0 1 11 3.3 c0 4.5-4.5 8.1-10 14.3z"
         fill="currentColor"
       />

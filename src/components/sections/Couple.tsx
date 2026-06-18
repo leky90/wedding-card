@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { asset } from "@/lib/assets";
@@ -12,12 +14,12 @@ interface PersonCardProps {
 function PersonCard({ person, role, parentLabel }: PersonCardProps) {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl shadow-card">
+      <div className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl shadow-card">
         <img
           src={asset(person.image)}
           alt={person.fullName}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="tile-img absolute inset-0 h-full w-full object-cover"
           style={{ objectPosition: person.imagePosition }}
         />
       </div>
@@ -55,14 +57,14 @@ export function Couple() {
           divider
         />
       </Reveal>
-      <div className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2 md:gap-10">
-        <Reveal delay={80}>
+      <Reveal variant="stagger" className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2 md:gap-10">
+        <div style={{ "--i": 0 } as CSSProperties}>
           <PersonCard person={groom} role="Chú rể" parentLabel="Con trai của" />
-        </Reveal>
-        <Reveal delay={200}>
+        </div>
+        <div style={{ "--i": 1 } as CSSProperties}>
           <PersonCard person={bride} role="Cô dâu" parentLabel="Con gái của" />
-        </Reveal>
-      </div>
+        </div>
+      </Reveal>
     </section>
   );
 }

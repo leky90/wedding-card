@@ -50,28 +50,279 @@ body {
   scrollbar-color: var(--color-rose-soft) transparent;
 }
 
+/* ============================ MOTION TOKENS ============================ */
+:root {
+  --ease-veil: cubic-bezier(0.22, 1, 0.36, 1); /* entrance: expo-out dịu, không vọt */
+  --ease-silk: cubic-bezier(0.33, 0, 0.2, 1); /* scroll-reveal */
+  --ease-breath: cubic-bezier(0.4, 0, 0.6, 1); /* vòng lặp sống (tim, đĩa, eq) */
+  --ease-press: cubic-bezier(0.34, 1.4, 0.7, 1); /* back-out: chỉ cho nhấn + tim pop */
+  --ease-hover: cubic-bezier(0.4, 0, 0.2, 1); /* hover thuận nghịch */
+  --dur-entrance: 1.1s;
+  --dur-reveal: 0.85s;
+}
+
 /* ---- Xuất hiện khi cuộn tới (class do <Reveal/> gắn) ---- */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translate3d(0, 22px, 0);
   transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
+    opacity var(--dur-reveal) var(--ease-silk),
+    transform var(--dur-reveal) var(--ease-silk);
 }
 .reveal.revealed {
   opacity: 1;
   transform: none;
 }
+/* biến thể: phóng nhẹ (ảnh / chân dung) */
+.reveal-scale {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0) scale(0.97);
+  transform-origin: center;
+  transition:
+    opacity var(--dur-reveal) var(--ease-silk),
+    transform var(--dur-reveal) var(--ease-silk);
+}
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: none;
+}
+/* biến thể: so le từng con (mỗi con gắn style --i) — vùng chứa đứng yên */
+.reveal.reveal-stagger {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-silk),
+    transform var(--dur-reveal) var(--ease-silk);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.reveal-stagger.revealed > * {
+  opacity: 1;
+  transform: none;
+}
 
-/* ---- Hiệu ứng vào trang (cover/hero) ---- */
+/* ---- Hiệu ứng vào trang (cover / hero) ---- */
 .rise {
   opacity: 0;
-  animation: rise 0.9s ease-out forwards;
+  animation: rise var(--dur-entrance) var(--ease-veil) forwards;
+  will-change: transform, opacity;
 }
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translate3d(0, 28px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* số ngày cưới: đi ít hơn để chữ nặng "đặt" xuống */
+.rise-num {
+  opacity: 0;
+  animation: rise-num var(--dur-entrance) var(--ease-veil) forwards;
+}
+@keyframes rise-num {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* gạch ngang giữa các hàng số: vẽ từ giữa ra */
+.rule-draw {
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: rule-draw 0.7s var(--ease-veil) forwards;
+}
+@keyframes rule-draw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---- Đường kẻ trái tim vẽ vào khi <Reveal> cha hiện ---- */
+.hd-line {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+}
+.hd-heart {
+  transform: scale(0.6);
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+.revealed .hd-line {
+  animation: hd-draw 0.9s var(--ease-veil) 0.15s forwards;
+}
+.revealed .hd-heart {
+  animation: hd-pop 0.5s var(--ease-press) 0.4s forwards;
+}
+@keyframes hd-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes hd-pop {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---- Màn bìa nâng lên (curtain lift), khớp setTimeout 1000ms ---- */
+.cover-shell {
+  transition:
+    transform 1s var(--ease-veil),
+    opacity 1s var(--ease-veil);
+  transition-delay: 0ms, 350ms;
+}
+.cover-opened {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.cover-photo {
+  transition: transform 1s var(--ease-veil);
+}
+.cover-opened .cover-photo {
+  transform: scale(1.04) translateY(-12px);
+}
+.cover-ring {
+  animation: ring-pulse 2.4s var(--ease-breath) 1000ms infinite;
+}
+.cover-ring-2 {
+  animation: ring-pulse 2.4s var(--ease-breath) 2200ms infinite;
+}
+
+/* ---- Vi tương tác: nhấn / nâng thẻ / phóng ảnh ---- */
+.press {
+  transition: transform 0.12s var(--ease-press);
+}
+.press:active {
+  transform: scale(0.96);
+}
+.card-lift {
+  position: relative;
+  transition: transform 0.3s var(--ease-hover);
+}
+.card-lift::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 28px 50px -20px rgb(124 27 34 / 0.28);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-hover);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .card-lift:hover {
+    transform: translateY(-6px);
+  }
+  .card-lift:hover::after {
+    opacity: 1;
+  }
+}
+.tile-img {
+  transition: transform 0.6s var(--ease-hover);
+}
+@media (hover: hover) {
+  .group:hover .tile-img {
+    transform: scale(1.04);
+  }
+}
+
+/* ---- Lightbox vào ---- */
+.lb-figure {
+  animation: lb-in 0.4s var(--ease-veil) forwards;
+}
+@keyframes lb-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lb-img {
+  animation: lb-img 0.35s var(--ease-silk) forwards;
+}
+@keyframes lb-img {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Nút nhạc: đĩa xoay + thanh equalizer khi đang phát ---- */
+.disc-enter {
+  animation: disc-in 0.3s var(--ease-veil) forwards;
+}
+@keyframes disc-in {
+  from {
+    opacity: 0;
+    transform: rotate(-30deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.disc-spin {
+  animation: spin 5s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.eq {
+  display: inline-flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+.eq span {
+  width: 2px;
+  height: 12px;
+  transform-origin: bottom;
+  background: currentColor;
+  animation: eq 0.9s var(--ease-breath) infinite;
+}
+.eq span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.eq span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.eq-wrap {
+  animation: eq-in 0.4s var(--ease-veil) forwards;
+}
+@keyframes eq-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
   }
   to {
     opacity: 1;
@@ -84,7 +335,7 @@ body {
   position: absolute;
   top: -8vh;
   left: var(--left);
-  animation: petal-fall var(--dur, 15s) linear var(--delay, 0s) infinite;
+  animation: petal-fall var(--dur, 18s) linear var(--delay, 0s) infinite;
   will-change: transform;
 }
 @keyframes petal-fall {
@@ -104,6 +355,7 @@ body {
   }
 }
 
+/* ---- Vòng lặp dịu (nhịp tim, trôi nhẹ, nẩy nhẹ, vòng xung nút) ---- */
 @keyframes float-soft {
   0%,
   100% {
@@ -118,14 +370,17 @@ body {
   100% {
     transform: scale(1);
   }
-  25% {
-    transform: scale(1.15);
+  20% {
+    transform: scale(1.12);
   }
-  50% {
+  40% {
     transform: scale(1);
   }
-  75% {
-    transform: scale(1.08);
+  60% {
+    transform: scale(1.06);
+  }
+  80% {
+    transform: scale(1);
   }
 }
 @keyframes ring-pulse {
@@ -147,38 +402,84 @@ body {
     transform: translateY(7px);
   }
 }
-
 .animate-float {
-  animation: float-soft 6s ease-in-out infinite;
+  animation: float-soft 6s var(--ease-breath) infinite;
 }
 .animate-heart {
-  animation: heart-beat 1.6s ease-in-out infinite;
+  animation: heart-beat 1.9s var(--ease-breath) infinite;
   transform-origin: center;
 }
 .animate-bounce-soft {
-  animation: bounce-soft 1.8s ease-in-out infinite;
+  animation: bounce-soft 1.8s var(--ease-breath) infinite;
 }
 
-/* Người dùng muốn giảm chuyển động → tắt toàn bộ hiệu ứng trang trí */
+/* ---- Tôn trọng prefers-reduced-motion: tắt mọi hiệu ứng, giữ trạng thái cuối ---- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .petal {
-    display: none;
+  .rise,
+  .rise-num,
+  .reveal,
+  .reveal-scale,
+  .reveal-stagger > *,
+  .reveal-stagger.revealed > *,
+  .rule-draw,
+  .press,
+  .press:active,
+  .card-lift,
+  .card-lift:hover,
+  .tile-img,
+  .group:hover .tile-img,
+  .lb-figure,
+  .lb-img,
+  .disc-enter,
+  .disc-spin,
+  .eq span,
+  .eq-wrap,
+  .cover-shell,
+  .cover-photo,
+  .cover-opened .cover-photo {
+    animation: none !important;
+    transition: none !important;
+    animation-delay: 0ms !important;
+    transition-delay: 0ms !important;
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
   }
-  .rise {
-    animation: none;
-    opacity: 1;
+  .card-lift::after {
+    transition: none !important;
   }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  /* Màn bìa vẫn ẩn khi mở (timeout 1000ms vẫn gỡ DOM), chỉ bỏ phần "bay" */
+  .cover-opened {
+    opacity: 0 !important;
+    transform: translateY(-100%) !important;
+    transition: none !important;
   }
-  .animate-float,
+  .hd-line {
+    stroke-dashoffset: 0 !important;
+  }
+  .hd-heart {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .revealed .hd-line,
+  .revealed .hd-heart {
+    animation: none !important;
+  }
   .animate-heart,
-  .animate-bounce-soft {
-    animation: none;
+  .animate-float,
+  .animate-bounce-soft,
+  .cover-ring,
+  .cover-ring-2 {
+    animation: none !important;
+  }
+  .eq span {
+    animation: none !important;
+    transform: scaleY(0.7) !important;
+  }
+  .petal {
+    display: none !important;
   }
 }

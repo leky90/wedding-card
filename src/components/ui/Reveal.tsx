@@ -7,10 +7,15 @@ interface RevealProps {
   className?: string;
   /** Trễ thêm (ms) để các phần tử cạnh nhau xuất hiện so le */
   delay?: number;
+  /**
+   * scale = phóng nhẹ (ảnh); stagger = các con trực tiếp hiện so le
+   * (mỗi con gắn style={{ "--i": n }}).
+   */
+  variant?: "scale" | "stagger";
 }
 
 /** Bọc nội dung để fade-up nhẹ khi cuộn tới (IntersectionObserver, chạy 1 lần). */
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
+export function Reveal({ children, className, delay = 0, variant }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,7 +43,12 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={cn("reveal", className)}
+      className={cn(
+        "reveal",
+        variant === "scale" && "reveal-scale",
+        variant === "stagger" && "reveal-stagger",
+        className,
+      )}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}

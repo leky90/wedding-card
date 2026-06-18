@@ -89,8 +89,8 @@ export interface WeddingConfig {
   rsvp: { deadline: string };
   /** Lời chúc mẫu hiển thị sẵn trong sổ lưu bút */
   wishes: Wish[];
-  /** File nhạc nền — thêm file thật vào /public/music */
-  audioSrc: string;
+  /** Nhạc nền — đặt file mp3 thật vào /public/music (xem public/music/README.md) */
+  music: { src: string; title: string; artist: string };
 }
 
 export const weddingConfig: WeddingConfig = {
@@ -218,5 +218,9 @@ export const weddingConfig: WeddingConfig = {
     },
   ],
 
-  audioSrc: "/music/wedding-song.mp3",
+  music: {
+    src: "/music/aloha.mp3",
+    title: "Aloha",
+    artist: "Jo Jung Suk",
+  },
 };

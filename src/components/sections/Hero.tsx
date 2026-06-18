@@ -56,14 +56,22 @@ export function Hero() {
           <span>{groom.name}</span>
         </h1>
 
-        <div
-          className="rise mt-9 flex flex-col items-center font-display font-bold leading-none tabular-nums text-rosegold"
-          style={{ animationDelay: "640ms" }}
-        >
+        <div className="mt-9 flex flex-col items-center font-display font-bold leading-none tabular-nums text-rosegold">
           {dateRows.map((row, i) => (
             <span key={i} className="contents">
-              {i > 0 && <span aria-hidden className="my-2 block h-px w-12 bg-rosegold/45 md:w-16" />}
-              <span className="text-[3.75rem] md:text-[7rem]">{row}</span>
+              {i > 0 && (
+                <span
+                  aria-hidden
+                  className="rule-draw my-2 block h-px w-12 bg-rosegold/45 md:w-16"
+                  style={{ animationDelay: `${720 + (i - 1) * 120}ms` }}
+                />
+              )}
+              <span
+                className="rise-num text-[3.75rem] md:text-[7rem]"
+                style={{ animationDelay: `${640 + i * 120}ms` }}
+              >
+                {row}
+              </span>
             </span>
           ))}
         </div>

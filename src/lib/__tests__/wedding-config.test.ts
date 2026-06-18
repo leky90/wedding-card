@@ -85,6 +85,17 @@ describe("wedding-config: nội dung hiển thị", () => {
     }
   });
 
+  it("mỗi sự kiện có id duy nhất", () => {
+    const ids = weddingConfig.events.map((e) => e.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("nhạc nền: trỏ tới file trong /music và có tên bài + ca sĩ", () => {
+    expect(weddingConfig.music.src).toMatch(/^\/music\/.+\.(mp3|ogg|m4a)$/);
+    expect(weddingConfig.music.title.trim().length).toBeGreaterThan(0);
+    expect(weddingConfig.music.artist.trim().length).toBeGreaterThan(0);
+  });
+
   it("trình tự ngày cưới: mỗi mốc có giờ dạng HH:MM và nhãn không rỗng", () => {
     expect(weddingConfig.dayTimeline.length).toBeGreaterThanOrEqual(3);
     for (const step of weddingConfig.dayTimeline) {

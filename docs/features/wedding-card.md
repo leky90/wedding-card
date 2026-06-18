@@ -54,6 +54,22 @@ chữ viết tay nối nét. Vì vậy web bỏ hẳn font script (Great Vibes) 
 
 Phần tử nổi: nút nhạc nền, nút lên đầu trang, lớp cánh hoa rơi.
 
+## Hiệu ứng (animation) & nhạc nền
+
+- **Hệ chuyển động thuần CSS** (token easing + keyframes trong `src/index.css`):
+  chỉ animate `transform/opacity` cho nhẹ máy. Vào trang `.rise` (cover/hero, so le),
+  cuộn tới `.reveal` (+ biến thể `reveal-scale`, `reveal-stagger` qua `<Reveal variant>`),
+  số ngày cưới hiện so le (`.rise-num` + gạch `.rule-draw`), màn bìa nâng lên kiểu rèm
+  (`.cover-shell`/`.cover-opened`, khớp `setTimeout` 1000ms), đường kẻ trái tim vẽ vào
+  (`.hd-line`/`.hd-heart`). Vi tương tác: nhấn (`.press`), nâng thẻ (`.card-lift`),
+  phóng ảnh hover (`.tile-img`), lightbox vào (`.lb-figure`/`.lb-img`).
+- **Tôn trọng `prefers-reduced-motion`**: 1 khối master tắt mọi hiệu ứng, giữ trạng thái
+  cuối; nhạc/lightbox/RSVP/đếm ngược KHÔNG bị khoá theo motion.
+- **Nhạc nền** cấu hình ở `weddingConfig.music` (`src`, `title`, `artist`). Tự phát khi
+  bấm "Mở thiệp" (đã có user gesture), lặp, volume 0.55; nút góc trái bật/tắt — đĩa xoay
+  + thanh equalizer "đang phát". **Cần tự đặt file nhạc hợp pháp** vào `public/music/`
+  (mặc định `aloha.mp3`); xem `public/music/README.md`. Repo không kèm file nhạc bản quyền.
+
 ## Dữ liệu từ xa (Supabase)
 
 - Env: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (xem `.env.example`).

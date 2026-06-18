@@ -14,7 +14,7 @@ export function FloatingButtons() {
 
   const tryPlay = useCallback(async () => {
     if (!audioRef.current) {
-      const audio = new Audio(asset(weddingConfig.audioSrc));
+      const audio = new Audio(asset(weddingConfig.music.src));
       audio.loop = true;
       audio.volume = 0.55;
       audioRef.current = audio;
@@ -67,23 +67,43 @@ export function FloatingButtons() {
         type="button"
         onClick={toggle}
         aria-pressed={playing}
-        aria-label={playing ? "Tắt nhạc nền" : "Bật nhạc nền"}
-        title={playing ? "Tắt nhạc nền" : "Bật nhạc nền (thêm file tại public/music/wedding-song.mp3)"}
-        className="fixed bottom-5 left-5 z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-rose-soft/70 bg-white/95 text-primary shadow-lg backdrop-blur transition hover:scale-105"
+        aria-label={
+          playing
+            ? `Tắt nhạc nền: ${weddingConfig.music.title}`
+            : `Bật nhạc nền: ${weddingConfig.music.title} - ${weddingConfig.music.artist}`
+        }
+        title={
+          playing
+            ? `Đang phát: ${weddingConfig.music.title} - ${weddingConfig.music.artist}`
+            : `Bật nhạc nền: ${weddingConfig.music.title} - ${weddingConfig.music.artist}`
+        }
+        className="press fixed bottom-5 left-5 z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-rose-soft/70 bg-white/95 text-primary shadow-lg backdrop-blur transition hover:scale-105"
       >
         {playing ? (
-          <Disc3 className="h-5 w-5 animate-[spin_5s_linear_infinite]" aria-hidden />
+          <Disc3 key="disc" className="h-5 w-5 disc-enter disc-spin" aria-hidden />
         ) : (
-          <Music className="h-5 w-5" aria-hidden />
+          <Music key="music" className="h-5 w-5 disc-enter" aria-hidden />
         )}
       </button>
+
+      {/* Thanh equalizer nhỏ "đang phát" cạnh nút nhạc */}
+      {playing && (
+        <span
+          aria-hidden
+          className="eq-wrap eq fixed bottom-[2rem] left-[4.45rem] z-40 h-3 text-primary"
+        >
+          <span />
+          <span />
+          <span />
+        </span>
+      )}
 
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Lên đầu trang"
         className={cn(
-          "fixed bottom-5 right-5 z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition hover:bg-primary-deep",
+          "press fixed bottom-5 right-5 z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition hover:bg-primary-deep",
           showTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
         )}
       >
